@@ -8,7 +8,7 @@ This guide is for the **support team** assisting users with the `.qr-dep` instal
 
 When users run the `.bat` file from the `.qr-dep` directory:
 
-1. A **log file** will be created at:
+1. A **log file** will be created at (access by pressing **WIN + R**):
 
 ```
 
