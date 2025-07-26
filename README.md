@@ -1,10 +1,11 @@
-#  `.qr-dep` Support Instructions
+
+# `.qr-dep` Support Instructions
 
 This guide is for the **support team** assisting users with the `.qr-dep` installer.
 
 ---
 
-##  Running the Installer
+## Running the Installer
 
 When users run the `.bat` file from the `.qr-dep` directory:
 
@@ -24,7 +25,7 @@ depinstaller\_XXXXXXXX\_XXXXXX.log
 
 ```
 
- **Ask users to send this log file in the support chat.** It helps us troubleshoot quickly.
+**Ask users to send this log file in the support chat.** It helps us troubleshoot quickly.
 
 ---
 
@@ -48,17 +49,17 @@ They must try to download **all three files**, even if some do not install prope
 
 ---
 
-###  Step 2: Verify Winget Installation
+### Step 2: Verify Winget Installation
 
 1. Open **PowerShell as Administrator**.
 2. Run:
 
-```powershell
+   ```powershell
    winget --version
-```
+````
 
-*  If it outputs a version number → Winget is installed correctly.
-*  If not, verify the user installed **App Installer** from the link above.
+* If it outputs a version number → Winget is installed correctly.
+* If not, verify the user installed **App Installer** from the link above.
 
 ---
 
@@ -79,6 +80,38 @@ If the problem persists even with Winget installed:
   ```
 
 * This file is located in the same directory as the main installer.
+
+---
+
+# Issue: WebView2 Installation Error - `0x80040c01`
+
+## Description
+
+Users sometimes encounter the following error during WebView2 installation:
+
+```
+0x80040c01
+```
+
+This error is often caused by problems with the **Evergreen bootstrapper** installer available here:
+
+[https://go.microsoft.com/fwlink/p/?LinkId=2124704](https://go.microsoft.com/fwlink/p/?LinkId=2124704)
+
+---
+
+## Workaround
+
+Instead of using the small bootstrapper, try using the **full offline installer** for WebView2:
+
+* Download from the official Microsoft WebView2 page:
+
+  [https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section)
+
+* Choose the **Evergreen Standalone Installer** (usually around 90MB), not the smaller bootstrapper.
+
+---
+
+If this workaround resolves the issue, please update the documentation or inform the user accordingly.
 
 ---
 
