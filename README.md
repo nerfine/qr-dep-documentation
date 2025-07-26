@@ -1,4 +1,3 @@
-markdown
 #  `.qr-dep` Support Instructions
 
 This guide is for the **support team** assisting users with the `.qr-dep` installer.
