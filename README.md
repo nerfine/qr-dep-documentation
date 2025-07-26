@@ -1,4 +1,4 @@
-```markdown
+markdown
 #  `.qr-dep` Support Instructions
 
 This guide is for the **support team** assisting users with the `.qr-dep` installer.
@@ -54,9 +54,9 @@ They must try to download **all three files**, even if some do not install prope
 1. Open **PowerShell as Administrator**.
 2. Run:
 
-   ```powershell
+```powershell
    winget --version
-````
+```
 
 *  If it outputs a version number → Winget is installed correctly.
 *  If not, verify the user installed **App Installer** from the link above.
