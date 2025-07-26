@@ -111,10 +111,6 @@ Instead of using the small bootstrapper, try using the **full offline installer*
 
 ---
 
-If this workaround resolves the issue, please update the documentation or inform the user accordingly.
-
----
-
 ## Need Help?
 
 If you have questions or need further assistance, please reach out in the support chat.
