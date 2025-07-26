@@ -79,7 +79,7 @@ If the problem persists even with Winget installed:
   depinstaller-nowinget.bat
   ```
 
-* This file is located in the same directory as the main installer.
+* You can find the bat file above..
 
 ---
 
