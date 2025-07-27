@@ -3,9 +3,6 @@
 
 This guide is for the **support team** assisting users with the `.qr-dep` installer.
 
-
-## Running the Installer
-
 ## Table of Contents
 
 - [Running the Installer](#running-the-installer)
@@ -18,6 +15,8 @@ This guide is for the **support team** assisting users with the `.qr-dep` instal
   - [Workaround](#workaround)
 - [Option 2: Manual Dependency Installation](#option-2-manual-dependency-installation)
 - [Need Help?](#need-help)
+
+## Running the Installer
 
 When users run the `.bat` file from the `.qr-dep` directory:
 
