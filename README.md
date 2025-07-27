@@ -3,9 +3,21 @@
 
 This guide is for the **support team** assisting users with the `.qr-dep` installer.
 
----
 
 ## Running the Installer
+
+## Table of Contents
+
+- [Running the Installer](#running-the-installer)
+- [Common Issue: Winget Not Found](#common-issue-winget-not-found)
+  - [Step 1: Download Required Files (ALL 3)](#step-1-download-required-files-all-3)
+  - [Step 2: Verify Winget Installation](#step-2-verify-winget-installation)
+  - [Step 3: Rerun the .bat Installer](#step-3-rerun-the-bat-installer)
+- [Still Not Working?](#still-not-working)
+- [Issue: WebView2 Installation Error - 0x80040c01](#issue-webview2-installation-error---0x80040c01)
+  - [Workaround](#workaround)
+- [Option 2: Manual Dependency Installation](#option-2-manual-dependency-installation)
+- [Need Help?](#need-help)
 
 When users run the `.bat` file from the `.qr-dep` directory:
 
@@ -103,6 +115,20 @@ Instead of using the small bootstrapper, try using the **full offline installer*
 * Choose the **Evergreen Standalone Installer** (usually around 90MB), not the smaller bootstrapper.
 
 ---
+
+## Option 2: Manual Dependency Installation
+
+If the automatic dependency installer fails or the user prefers to install manually, provide them with the following official download links:
+
+They must download and install **all** the following:
+
+- [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)  
+- [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
+- [Visual C++ Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
+- [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)  
+- [DirectX End-User Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)  
+- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+
 
 ## Option 2: Manual Dependency Installation (If Auto Installer Fails)
 
