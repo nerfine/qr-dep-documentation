@@ -12,17 +12,13 @@ When users run the `.bat` file from the `.qr-dep` directory:
 1. A **log file** will be created at (access by pressing **WIN + R**):
 
 ```
-
-%temp%\batch\_installer
-
+%temp%\batch_installer
 ```
 
 2. The log file will be named something like:
 
 ```
-
-depinstaller\_XXXXXXXX\_XXXXXX.log
-
+depinstaller_XXXXXXXX_XXXXXX.log
 ```
 
 **Ask users to send this log file in the support chat.** It helps us troubleshoot quickly.
@@ -34,10 +30,8 @@ depinstaller\_XXXXXXXX\_XXXXXX.log
 If users see this error:
 
 ```
-
-\[ERROR] Winget not found. Please install it from the Microsoft Store.
-
-````
+[ERROR] Winget not found. Please install it from the Microsoft Store.
+```
 
 ### Step 1: Download Required Files (ALL 3)
 
@@ -55,7 +49,7 @@ They must try to download **all three files**, even if some do not install prope
 2. Run:
 
 ```powershell
-   winget --version
+winget --version
 ```
 
 * If it outputs a version number → Winget is installed correctly.
@@ -75,17 +69,17 @@ If the problem persists even with Winget installed:
 
 * Send the user the alternative batch file:
 
-  ```
-  depinstaller-nowinget.bat
-  ```
+```
+depinstaller-nowinget.bat
+```
 
-* You can find the bat file above..
+* You can find the `.bat` file above.
 
 ---
 
-# Issue: WebView2 Installation Error - `0x80040c01`
+## Issue: WebView2 Installation Error - `0x80040c01`
 
-## Description
+### Description
 
 Users sometimes encounter the following error during WebView2 installation:
 
@@ -99,15 +93,76 @@ https://go.microsoft.com/fwlink/p/?LinkId=2124704
 
 ---
 
-## Workaround
+### Workaround
 
 Instead of using the small bootstrapper, try using the **full offline installer** for WebView2:
 
-* Download from the official Microsoft WebView2 page:
-
+* Download from the official Microsoft WebView2 page:  
   https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 
 * Choose the **Evergreen Standalone Installer** (usually around 90MB), not the smaller bootstrapper.
+
+---
+
+## Option 2: Manual Dependency Installation
+
+If the automatic dependency installer fails or the user prefers to install manually, provide them with the following official download links:
+
+They must download and install **all** the following:
+
+- [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)  
+- [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
+- [Visual C++ Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
+- [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)  
+- [DirectX End-User Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)  
+- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+
+
+## Option 2: Manual Dependency Installation (If Auto Installer Fails)
+
+If the automatic `.bat` installer doesn't work, guide the user through manually installing dependencies:
+
+Ask them to install **each** of the following files manually:
+
+- [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
+- [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+- [Visual C++ Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+- [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)
+- [DirectX End-User Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)
+- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+
+Ask the user to restart their PC after installing everything. If they still experience issues, continue troubleshooting in chat.
+
+<details>
+<summary>💬 Premade Message for Option 2 Support</summary>
+
+Support staff can use the following message when sending users instructions for manual dependency installation:
+
+```
+
+Hi! Since the automatic installer didn't work on your system, please try installing the required dependencies manually.
+
+Here are the links to each one — make sure to install **all of them**, even if you think they’re already on your PC:
+
+* .NET Runtime 8.0: [https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
+* Visual C++ Redistributable (x64): [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+* Visual C++ Redistributable (x86): [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+* Microsoft Edge WebView2 Runtime: [https://developer.microsoft.com/en-us/microsoft-edge/webview2/](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)
+* DirectX End-User Runtime: [https://www.microsoft.com/en-us/download/details.aspx?id=35](https://www.microsoft.com/en-us/download/details.aspx?id=35)
+* .NET Framework 4.8: [https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+
+After installing all of them, restart your PC and try launching Bunni again.
+
+Let me know if you run into any issues!
+
+```
+
+</details>
+
+
+### Important:
+✅ Make sure users **restart their PC** after installing all the dependencies.  
+✅ They should test Bunni again only **after the restart**.
 
 ---
 
