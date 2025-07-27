@@ -104,20 +104,6 @@ Instead of using the small bootstrapper, try using the **full offline installer*
 
 ---
 
-## Option 2: Manual Dependency Installation
-
-If the automatic dependency installer fails or the user prefers to install manually, provide them with the following official download links:
-
-They must download and install **all** the following:
-
-- [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)  
-- [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
-- [Visual C++ Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
-- [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)  
-- [DirectX End-User Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)  
-- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
-
-
 ## Option 2: Manual Dependency Installation (If Auto Installer Fails)
 
 If the automatic `.bat` installer doesn't work, guide the user through manually installing dependencies:
