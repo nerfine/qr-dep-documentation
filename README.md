@@ -142,7 +142,7 @@ Support staff can use the following message when sending users instructions for 
 
 Hi! Since the automatic installer didn't work on your system, please try installing the required dependencies manually.
 
-Here are the links to each one — make sure to install **all of them**, even if you think they’re already on your PC:
+Here are the links to each one. Make sure to install **all of them**, even if you think they’re already on your PC:
 
 * .NET Runtime 8.0: [https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
 * Visual C++ Redistributable (x64): [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
@@ -153,7 +153,7 @@ Here are the links to each one — make sure to install **all of them**, even if
 
 After installing all of them, restart your PC and try launching Bunni again.
 
-Let me know if you run into any issues!
+Let us know if you run into any issues!
 
 ```
 
