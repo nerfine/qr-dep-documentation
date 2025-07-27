@@ -73,8 +73,6 @@ They must try to download **all three files**, even if some do not install prope
 - [Microsoft.UI.Xaml 2.7.0 Package](https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.0)  
 - [App Installer (includes Winget)](https://aka.ms/getwinget)  
 
-────────────────────────────────────────────────────────────────────────────────
-
 ### Step 2: Verify Winget Installation
 
 1. Open **PowerShell as Administrator**.
@@ -86,8 +84,6 @@ winget --version
 
 * If it outputs a version number → Winget is installed correctly.
 * If not, verify the user installed **App Installer** from the link above.
-
-────────────────────────────────────────────────────────────────────────────────
 
 ### Step 3: Rerun the `.bat` Installer
 
@@ -241,6 +237,8 @@ Let us know if the manual installation works or if you need help with Windows up
 
 </details>
 
+────────────────────────────────────────────────────────────────────────────────
+
 ### Issue: Visual C++ Redistributable Installation Fails
 
 **Error Messages:**
@@ -302,6 +300,8 @@ This clean install approach usually fixes VC++ issues and MSVCP140.dll/VCRUNTIME
 
 </details>
 
+────────────────────────────────────────────────────────────────────────────────
+
 ### Issue: DirectX Runtime Installation Problems
 
 **Error Messages:**
@@ -339,6 +339,8 @@ If you're on Windows 10/11, DirectX should already be built-in, so this error mi
 ```
 
 </details>
+
+────────────────────────────────────────────────────────────────────────────────
 
 ### Issue: .NET Framework 4.8.1 Installation Problems
 
@@ -399,6 +401,8 @@ The script needs admin rights because it's installing system-level components li
 ```
 
 </details>
+
+────────────────────────────────────────────────────────────────────────────────
 
 ### Issue: Antivirus Interference
 
@@ -461,6 +465,8 @@ We know this is annoying, but some corporate firewalls or antivirus programs blo
 
 </details>
 
+────────────────────────────────────────────────────────────────────────────────
+
 ### Issue: Corrupted Downloads
 
 **Error Messages:**
@@ -504,6 +510,8 @@ Let us know if the problem persists. We might need to send you a pre-packaged in
 ```
 
 </details>
+
+────────────────────────────────────────────────────────────────────────────────
 
 ### Issue: Windows Updates Required
 
