@@ -95,7 +95,7 @@ Users sometimes encounter the following error during WebView2 installation:
 
 This error is often caused by problems with the **Evergreen bootstrapper** installer available here:
 
-[https://go.microsoft.com/fwlink/p/?LinkId=2124704](https://go.microsoft.com/fwlink/p/?LinkId=2124704)
+https://go.microsoft.com/fwlink/p/?LinkId=2124704
 
 ---
 
@@ -105,7 +105,7 @@ Instead of using the small bootstrapper, try using the **full offline installer*
 
 * Download from the official Microsoft WebView2 page:
 
-  [https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section)
+  https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 
 * Choose the **Evergreen Standalone Installer** (usually around 90MB), not the smaller bootstrapper.
 
