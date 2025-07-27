@@ -55,7 +55,7 @@ depinstaller_XXXXXXXX_XXXXXX.log
 
 **Ask users to send this log file in the support chat.** It helps us troubleshoot quickly.
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Common Issue: Winget Not Found
 
@@ -73,7 +73,7 @@ They must try to download **all three files**, even if some do not install prope
 - [Microsoft.UI.Xaml 2.7.0 Package](https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.0)  
 - [App Installer (includes Winget)](https://aka.ms/getwinget)  
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ### Step 2: Verify Winget Installation
 
@@ -87,13 +87,13 @@ winget --version
 * If it outputs a version number → Winget is installed correctly.
 * If not, verify the user installed **App Installer** from the link above.
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ### Step 3: Rerun the `.bat` Installer
 
 After confirming Winget is installed, ask the user to **rerun the `.bat` file**.
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Still Not Working?
 
@@ -108,7 +108,7 @@ depinstaller-nowinget.bat
 * You can find the `.bat` file above.
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 No worries! Winget isn't installed on your system. Here are two ways to fix this:
@@ -131,7 +131,7 @@ We'd recommend trying Option 1 first since it's simpler!
 
 </details>
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Issue: WebView2 Installation Error - `0x80040c01`
 
@@ -160,7 +160,7 @@ This error is often caused by problems with the **Evergreen bootstrapper** insta
 3. **Run Windows Update** before attempting installation again
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 Hi! That's a known WebView2 error. Here's the exact fix:
@@ -187,7 +187,7 @@ Let us know if you run into any issues with these steps.
 
 </details>
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Common Dependency Installation Issues
 
@@ -213,7 +213,7 @@ Let us know if you run into any issues with these steps.
    - Update Windows if necessary
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 The .NET Runtime installation hit an issue. Let's fix this:
@@ -267,7 +267,7 @@ Let us know if the manual installation works or if you need help with Windows up
    ```
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 The Visual C++ components failed to install, or you're getting an MSVCP140.dll or VCRUNTIME140.dll error. This is pretty common.
@@ -318,7 +318,7 @@ This clean install approach usually fixes VC++ issues and MSVCP140.dll/VCRUNTIME
    - Legacy DirectX components may still be needed
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 DirectX installation failed. This happens sometimes on older Windows systems. Let's install it manually:
@@ -373,7 +373,7 @@ If you're on Windows 10/11, DirectX should already be built-in, so this error mi
    ```
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 The script needs Administrator privileges to install system components. Here's how to run it properly:
@@ -431,7 +431,7 @@ The script needs admin rights because it's installing system-level components li
    - Rerun script
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 It looks like the downloads are failing due to network/firewall issues
@@ -477,7 +477,7 @@ We know this is annoying, but some corporate firewalls or antivirus programs blo
 3. **Check disk space** - ensure at least 1GB free
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 The downloaded files got corrupted during the download. This happens sometimes with unstable internet connections. Let's fix this:
@@ -520,7 +520,7 @@ Let us know if the problem persists. We might need to send you a pre-packaged in
 2. **Update Windows 10/11 to latest version**
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 Several components failed to install, which usually means your Windows needs updates. Modern software requires recent Windows updates to install properly.
@@ -551,17 +551,17 @@ If you're on Windows 7 or 8, those are no longer supported by Microsoft, and mod
 
 </details>
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Troubleshooting Flowchart
 
 When users report issues with `depinstaller_fixed.bat`, follow this diagnostic flow:
 
 ### Step 1: Check Basic Requirements
-- ✅ Windows 10/11 (version 1607+)
-- ✅ Admin rights (script auto-elevates)
-- ✅ Internet connection
-- ✅ At least 1GB free disk space
+- [x] Windows 10/11 (version 1607+)
+- [x] Admin rights (script auto-elevates)
+- [x] Internet connection
+- [x] At least 1GB free disk space
 
 ### Step 2: Identify the Failure Point
 Ask user to find the **exact error message** in the log file:
@@ -588,7 +588,7 @@ Key sections to check in the log:
 3. **Installation results** - Component-specific failures
 4. **Error codes** - Specific failure reasons
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Emergency Fallback: Complete Manual Installation
 
@@ -623,7 +623,7 @@ reg query "HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F4A5B3DC-0E5D-4C0A-836E-4
 ```
 
 <details>
-<summary>💬 Premade Support Message</summary>
+<summary>Premade Support Message</summary>
 
 ```
 The automatic installer is having multiple issues. Let's switch to completely manual installation:
@@ -663,7 +663,7 @@ This manual approach bypasses all the automatic installer issues. Let us know if
 
 </details>
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Advanced Troubleshooting Commands
 
@@ -698,7 +698,7 @@ del /f /q "%TEMP%\batch_installer\*.*"
 rmdir /s /q "%TEMP%\batch_installer"
 ```
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Option 2: Manual Dependency Installation
 
@@ -730,7 +730,7 @@ Ask them to install **each** of the following files manually:
 Ask the user to restart their PC after installing everything. If they still experience issues, continue troubleshooting in chat.
 
 <details>
-<summary>💬 Premade Message for Option 2 Support</summary>
+<summary>Premade Message for Option 2 Support</summary>
 
 Support staff can use the following message when sending users instructions for manual dependency installation:
 
@@ -757,10 +757,10 @@ Let us know if you run into any issues!
 
 
 ### Important:
-✅ Make sure users **restart their PC** after installing all the dependencies.  
-✅ They should test Bunni again only **after the restart**.
+- Make sure users **restart their PC** after installing all the dependencies  
+- They should test Bunni again only **after the restart**
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Quick Support Reference Card
 
@@ -779,7 +779,7 @@ Let us know if you run into any issues!
 - **Log Location**: `%temp%\batch_installer\depinstaller_*.log`
 - **Manual Downloads**: All links provided in Option 2 section above
 
----
+────────────────────────────────────────────────────────────────────────────────
 
 ## Need Help?
 
