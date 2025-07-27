@@ -32,31 +32,10 @@ set "LOGFILE=%TEMPDIR%\depinstaller_%LOGSTAMP%.log"
 echo Logging to "%LOGFILE%"
 call :main
 exit /b
-
-:show_help
-echo.
-echo Bunni Dependency Installer v2.0 (No-Winget)
-echo.
-echo Usage: %~nx0 [options]
-echo.
-echo Options:
-echo   --help          Show this help message
-echo   --no-dotnet     Skip .NET Desktop Runtime installation
-echo   --no-vcredist   Skip Visual C++ Redistributables installation
-echo   --no-webview2   Skip WebView2 Runtime installation
-echo   --no-directx    Skip DirectX Runtime installation
-echo   --no-framework  Skip .NET Framework 4.8.1 installation
-echo   --quiet         Suppress informational output
-echo.
-echo Example:
-echo   %~nx0 --no-dotnet --no-webview2
-echo.
-exit /b 0
-
 :main
 call :log "╔══════════════════════════════════════════════════════╗"
-call :log "║         🐰 Bunni Dependency Installer (No-Winget)    ║"
-call :log "║        Optimized by NERFINE - Base: SYSDRIVER        ║"
+call :log "            🐰 Bunni Dependency Installer             "
+call :log "        Optimized by NERFINE - Base: SYSDRIVER        "
 call :log "╚══════════════════════════════════════════════════════╝"
 call :log ""
 
@@ -69,36 +48,6 @@ if exist "%ARGSFILE%" (
     call :parse_args_from_cmdline %*
 )
 goto continue_main
-
-:parse_args_string
-set "ARGSTRING=%~1"
-for %%A in (%ARGSTRING%) do (
-    if /i "%%A"=="--no-dotnet" set "INSTALL_DOTNET=0"
-    if /i "%%A"=="--no-vcredist" (
-        set "INSTALL_VCREDIST_X64=0"
-        set "INSTALL_VCREDIST_X86=0"
-    )
-    if /i "%%A"=="--no-webview2" set "INSTALL_WEBVIEW2=0"
-    if /i "%%A"=="--no-directx" set "INSTALL_DIRECTX=0"
-    if /i "%%A"=="--no-framework" set "INSTALL_NDP481=0"
-    if /i "%%A"=="--quiet" set "QUIET_MODE=1"
-)
-exit /b
-
-:parse_args_from_cmdline
-:parse_args
-if "%~1"=="" exit /b
-if /i "%~1"=="--no-dotnet" set "INSTALL_DOTNET=0"
-if /i "%~1"=="--no-vcredist" (
-    set "INSTALL_VCREDIST_X64=0"
-    set "INSTALL_VCREDIST_X86=0"
-)
-if /i "%~1"=="--no-webview2" set "INSTALL_WEBVIEW2=0"
-if /i "%~1"=="--no-directx" set "INSTALL_DIRECTX=0"
-if /i "%~1"=="--no-framework" set "INSTALL_NDP481=0"
-if /i "%~1"=="--quiet" set "QUIET_MODE=1"
-shift
-goto parse_args
 
 :continue_main
 
@@ -133,6 +82,10 @@ if %errorlevel% NEQ 0 (
     exit /b 1
 )
 call :log "    [✔] PowerShell found."
+
+call :log "    Checking Winget..."
+call :log "    [~] Winget not required for this installer."
+
 call :log ""
 
 for /f %%A in ('powershell -NoProfile -Command "[guid]::NewGuid().ToString('N')"') do set "UUID=%%A"
@@ -141,6 +94,17 @@ set "VCREDIST_X86=%TEMPDIR%\vc_redist_x86_%UUID%.exe"
 set "WEBVIEW2=%TEMPDIR%\webview2_%UUID%.exe"
 set "DXREDIST=%TEMPDIR%\directx_redist_%UUID%.exe"
 set "NDP481=%TEMPDIR%\ndp481_%UUID%.exe"
+
+set "DOTNET_URL=https://download.visualstudio.microsoft.com/download/pr/105b0f6d-d3b9-4a41-a78b-321cb74a44a0/e287dc267a9c67ea23834d06239e6e7a/windowsdesktop-runtime-8.0.7-win-x64.exe"
+set "VCREDIST_X64_URL=https://aka.ms/vs/17/release/vc_redist.x64.exe"
+set "VCREDIST_X86_URL=https://aka.ms/vs/17/release/vc_redist.x86.exe"
+set "WEBVIEW2_URL=https://go.microsoft.com/fwlink/p/?LinkId=2124703"
+set "DIRECTX_URL=https://download.microsoft.com/download/1/6/1/161a7e5d-9d07-4f31-9276-c44a69c6f0e3/directx_Jun2010_redist.exe"
+set "NDP481_URL=https://go.microsoft.com/fwlink/?linkid=2088631"
+
+set "DOTNET_SHA256=391ca05d7540c58f25047ae07b8c5656829f7fd32f6e88a4e34c5337525f574e5714657e1c4f4f4d48e006087f573f8c03f1fc8eab8c9b9dab4d5ca5c8ea1fd4"
+set "VCREDIST_X64_SHA256=UNKNOWN"
+set "VCREDIST_X86_SHA256=UNKNOWN"
 
 set "DOTNET_STATUS=UNKNOWN"
 set "VCREDIST_X64_STATUS=UNKNOWN"
@@ -152,202 +116,159 @@ set "REBOOT_REQUIRED=0"
 
 echo.
 echo ==============================
-echo Installing required components
+echo Checking dependencies
 echo ==============================
 echo.
 
 call :log "════════════════════════════════════════════════════════"
-call :log "🔧 Installing Required Components"
+call :log "🔍 Checking Dependencies"
+call :log "════════════════════════════════════════════════════════"
+call :log ""
+
+call :check_all_dependencies
+
+call :log ""
+call :log "════════════════════════════════════════════════════════"
+call :log "📋 Dependency Check Summary"
+call :log "════════════════════════════════════════════════════════"
+call :log ""
+
+set "MISSING_COUNT=0"
+if "%DOTNET_STATUS%"=="MISSING" if "%INSTALL_DOTNET%"=="1" set /a MISSING_COUNT+=1
+if "%VCREDIST_X64_STATUS%"=="MISSING" if "%INSTALL_VCREDIST_X64%"=="1" set /a MISSING_COUNT+=1
+if "%VCREDIST_X86_STATUS%"=="MISSING" if "%INSTALL_VCREDIST_X86%"=="1" set /a MISSING_COUNT+=1
+if "%WEBVIEW2_STATUS%"=="MISSING" if "%INSTALL_WEBVIEW2%"=="1" set /a MISSING_COUNT+=1
+if "%DIRECTX_STATUS%"=="MISSING" if "%INSTALL_DIRECTX%"=="1" set /a MISSING_COUNT+=1
+if "%NDP481_STATUS%"=="MISSING" if "%INSTALL_NDP481%"=="1" set /a MISSING_COUNT+=1
+
+call :display_check_summary
+
+if %MISSING_COUNT% EQU 0 (
+    call :log ""
+    call :log "🎉 All dependencies are already installed!"
+    call :log "📁 Log saved at: %LOGFILE%"
+    call :log ""
+    call :log "[SUCCESS] No installation required."
+    echo.
+    echo ==============================
+    echo Process Complete
+    echo ==============================
+    echo.
+    
+    call :log "[INFO] Closing in 3 seconds..."
+    timeout /t 3 /nobreak >nul 2>&1
+    exit /b 0
+)
+
+call :log ""
+call :log "[INFO] Found %MISSING_COUNT% missing dependencies."
+echo.
+echo ==============================
+echo Installation Confirmation
+echo ==============================
+echo.
+echo Found %MISSING_COUNT% missing dependencies that need to be installed.
+echo.
+set /p "CONFIRM=Do you want to install the missing dependencies? (Y/N): "
+
+if /i not "%CONFIRM%"=="Y" if /i not "%CONFIRM%"=="YES" (
+    call :log ""
+    call :log "[INFO] Installation cancelled by user."
+    call :log "📁 Log saved at: %LOGFILE%"
+    echo Installation cancelled. Exiting...
+    echo.
+    
+    timeout /t 2 /nobreak >nul 2>&1
+    exit /b 0
+)
+
+echo.
+echo ==============================
+echo Installing missing components
+echo ==============================
+echo.
+
+call :log ""
+call :log "════════════════════════════════════════════════════════"
+call :log "🔧 Installing Missing Components"
 call :log "════════════════════════════════════════════════════════"
 call :log ""
 
 if "%INSTALL_DOTNET%"=="0" (
-    call :log "[1/6] .NET Desktop Runtime 8.0"
+    call :log "[1/?] .NET Desktop Runtime 8.0"
     call :log "    [~] Skipped by user (--no-dotnet)"
-    set "DOTNET_STATUS=USER_SKIPPED"
+) else if "%DOTNET_STATUS%"=="MISSING" (
+    call :log "[1/?] .NET Desktop Runtime 8.0"
+    call :log "    [↻] Installing..."
+    call :install_dotnet_runtime
 ) else (
-    call :log "[1/6] .NET Desktop Runtime 8.0"
-    call :log "    [~] Checking..."
-    reg query "HKLM\SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\WindowsDesktop" | find "8.0" >nul
-    if %errorlevel%==0 (
-        call :log "    [✔] Already installed. No upgrade available."
-        set "DOTNET_STATUS=SKIPPED"
-    ) else (
-        call :log "    [!] Registry key not found."
-        call :log "    [↻] Attempting install..."
-        call :install_dotnet_runtime
-    )
+    call :log "[1/?] .NET Desktop Runtime 8.0"
+    call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_VCREDIST_X64%"=="0" (
-    call :log "[2/6] VC++ Redistributable x64"
+    call :log "[2/?] VC++ Redistributable x64"
     call :log "    [~] Skipped by user (--no-vcredist)"
-    set "VCREDIST_X64_STATUS=USER_SKIPPED"
+) else if "%VCREDIST_X64_STATUS%"=="MISSING" (
+    call :log "[2/?] VC++ Redistributable x64"
+    call :log "    [↻] Installing..."
+    call :install_vcredist_x64
 ) else (
-    call :log "[2/6] VC++ Redistributable x64"
-    call :log "    [~] Checking..."
-    reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" >nul 2>&1
-    if %errorlevel%==0 (
-        call :log "    [✔] Already installed. Skipping."
-        set "VCREDIST_X64_STATUS=SKIPPED"
-    ) else (
-        call :log "    [↓] Downloading..."
-        powershell -Command "Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vc_redist.x64.exe' -OutFile '%VCREDIST_X64%' -TimeoutSec 30 -UseBasicParsing"
-        call :log "    [⚙] Installing..."
-        "%VCREDIST_X64%" /install /quiet /norestart
-        if errorlevel 1 (
-            call :log "    [✖] Installation failed."
-            set "VCREDIST_X64_STATUS=FAILED"
-            exit /b 12
-        )
-        call :cleanup "%VCREDIST_X64%"
-        call :log "    [✔] Installed successfully."
-        set "VCREDIST_X64_STATUS=INSTALLED"
-    )
+    call :log "[2/?] VC++ Redistributable x64"
+    call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_VCREDIST_X86%"=="0" (
-    call :log "[3/6] VC++ Redistributable x86"
+    call :log "[3/?] VC++ Redistributable x86"
     call :log "    [~] Skipped by user (--no-vcredist)"
-    set "VCREDIST_X86_STATUS=USER_SKIPPED"
+) else if "%VCREDIST_X86_STATUS%"=="MISSING" (
+    call :log "[3/?] VC++ Redistributable x86"
+    call :log "    [↻] Installing..."
+    call :install_vcredist_x86
 ) else (
-    call :log "[3/6] VC++ Redistributable x86"
-    call :log "    [~] Checking..."
-    reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" >nul 2>&1
-    if %errorlevel%==0 (
-        call :log "    [✔] Already installed. Skipping."
-        set "VCREDIST_X86_STATUS=SKIPPED"
-    ) else (
-        call :log "    [↓] Downloading..."
-        powershell -Command "Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vc_redist.x86.exe' -OutFile '%VCREDIST_X86%' -TimeoutSec 30 -UseBasicParsing"
-        call :log "    [⚙] Installing..."
-        "%VCREDIST_X86%" /install /quiet /norestart > "%TEMPDIR%\vcredist_x86_install.log" 2>&1
-        echo [DEBUG] VC++ Redist x86 installer exit code: !errorlevel!
-        if "!errorlevel!"=="3010" (
-            call :log "    [⚠] Installed. Reboot required."
-            set "VCREDIST_X86_STATUS=INSTALLED (REBOOT REQUIRED)"
-            set "REBOOT_REQUIRED=1"
-        ) else if not "!errorlevel!"=="0" (
-            call :log "    [✖] Installation failed. See log for details."
-            set "VCREDIST_X86_STATUS=FAILED"
-            exit /b 13
-        ) else (
-            call :log "    [✔] Installed successfully. (Exit Code: 0)"
-            set "VCREDIST_X86_STATUS=INSTALLED"
-        )
-        call :cleanup "%VCREDIST_X86%"
-    )
+    call :log "[3/?] VC++ Redistributable x86"
+    call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_WEBVIEW2%"=="0" (
-    call :log "[4/6] WebView2 Runtime"
+    call :log "[4/?] WebView2 Runtime"
     call :log "    [~] Skipped by user (--no-webview2)"
-    set "WEBVIEW2_STATUS=USER_SKIPPED"
+) else if "%WEBVIEW2_STATUS%"=="MISSING" (
+    call :log "[4/?] WebView2 Runtime"
+    call :log "    [↻] Installing..."
+    call :install_webview2
 ) else (
-    call :log "[4/6] WebView2 Runtime"
-    call :log "    [~] Checking..."
-    reg query "HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F4A5B3DC-0E5D-4C0A-836E-4AD7EA73D1B2}" >nul 2>&1
-    if %errorlevel%==0 (
-        call :log "    [✔] Already installed. Skipping."
-        set "WEBVIEW2_STATUS=SKIPPED"
-    ) else (
-        call :log "    [↓] Downloading..."
-        powershell -Command "Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/p/?LinkId=2124703' -OutFile '%WEBVIEW2%' -MaximumRedirection 5 -TimeoutSec 60 -UseBasicParsing"
-        if not exist "%WEBVIEW2%" (
-            call :log "    [✖] Download failed."
-            set "WEBVIEW2_STATUS=FAILED"
-            goto continue_installs2
-        )
-        for /f "tokens=*" %%F in ('more "%WEBVIEW2%" ^| findstr /i "<html"') do (
-            call :log "    [✖] Download failed - received HTML instead of EXE."
-            del /f /q "%WEBVIEW2%"
-            set "WEBVIEW2_STATUS=FAILED"
-            goto continue_installs2
-        )
-        for %%F in ("%WEBVIEW2%") do (
-            if %%~zF lss 100000 (
-                call :log "    [✖] Download incomplete. File too small."
-                del /f /q "%WEBVIEW2%"
-                set "WEBVIEW2_STATUS=FAILED"
-                goto continue_installs2
-            )
-        )
-        call :log "    [⚙] Installing..."
-        "%WEBVIEW2%" /install /quiet /norestart /log:"%TEMPDIR%\webview2_setup.log"
-        if errorlevel 1 (
-            call :log "    [✖] Installation failed."
-            set "WEBVIEW2_STATUS=FAILED"
-            goto continue_installs2
-        )
-        del /f /q "%WEBVIEW2%"
-        call :log "    [✔] Installed."
-        set "WEBVIEW2_STATUS=INSTALLED"
-    )
+    call :log "[4/?] WebView2 Runtime"
+    call :log "    [✔] Already installed. Skipping."
 )
-:continue_installs2
 call :log ""
 
 if "%INSTALL_DIRECTX%"=="0" (
-    call :log "[5/6] DirectX Runtime"
+    call :log "[5/?] DirectX Runtime"
     call :log "    [~] Skipped by user (--no-directx)"
-    set "DIRECTX_STATUS=USER_SKIPPED"
+) else if "%DIRECTX_STATUS%"=="MISSING" (
+    call :log "[5/?] DirectX Runtime"
+    call :log "    [↻] Installing..."
+    call :install_directx
 ) else (
-    call :log "[5/6] DirectX Runtime"
-    call :log "    [~] Checking..."
-    if exist "%WINDIR%\System32\D3DX9_43.dll" (
-        call :log "    [✔] Already installed. Skipping."
-        set "DIRECTX_STATUS=SKIPPED"
-    ) else (
-        call :log "    [↓] Downloading..."
-        powershell -Command "Invoke-WebRequest -Uri 'https://download.microsoft.com/download/1/6/1/161a7e5d-9d07-4f31-9276-c44a69c6f0e3/directx_Jun2010_redist.exe' -OutFile '%DXREDIST%' -TimeoutSec 60 -UseBasicParsing"
-        call :log "    [⚙] Extracting DXSetup..."
-        "%DXREDIST%" /Q /T "%TEMPDIR%\directx_temp"
-        if exist "%TEMPDIR%\directx_temp\DXSETUP.exe" (
-            call :log "    [⚙] Installing DirectX components..."
-            "%TEMPDIR%\directx_temp\DXSETUP.exe" /silent
-        )
-        del /f /q "%DXREDIST%"
-        rmdir /s /q "%TEMPDIR%\directx_temp"
-        call :log "    [✔] Installed."
-        set "DIRECTX_STATUS=INSTALLED"
-    )
+    call :log "[5/?] DirectX Runtime"
+    call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_NDP481%"=="0" (
-    call :log "[6/6] .NET Framework 4.8.1"
+    call :log "[6/?] .NET Framework 4.8.1"
     call :log "    [~] Skipped by user (--no-framework)"
-    set "NDP481_STATUS=USER_SKIPPED"
+) else if "%NDP481_STATUS%"=="MISSING" (
+    call :log "[6/?] .NET Framework 4.8.1"
+    call :log "    [↻] Installing..."
+    call :install_ndp481
 ) else (
-    call :log "[6/6] .NET Framework 4.8.1"
-    call :log "    [~] Checking..."
-    reg query "HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" /v Release | findstr /r /c:"53332[0-9]" >nul
-    if %errorlevel%==0 (
-        call :log "    [✔] Already installed. Skipping."
-        set "NDP481_STATUS=SKIPPED"
-    ) else (
-        call :log "    [↓] Downloading..."
-        powershell -Command "Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?linkid=2088631' -OutFile '%NDP481%' -TimeoutSec 60 -UseBasicParsing"
-        if exist "%NDP481%" (
-            call :log "    [⚙] Installing..."
-            "%NDP481%" /q /norestart
-            if errorlevel 1 (
-                call :log "    [✖] Installation failed."
-                set "NDP481_STATUS=FAILED"
-                exit /b 15
-            )
-            del /f /q "%NDP481%"
-            call :log "    [✔] Installed with all components prepared."
-            set "NDP481_STATUS=INSTALLED"
-        ) else (
-            call :log "    [✖] Download failed."
-            set "NDP481_STATUS=FAILED"
-            exit /b 15
-        )
-    )
+    call :log "[6/?] .NET Framework 4.8.1"
+    call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
@@ -365,38 +286,32 @@ echo.
 
 call :log ""
 call :log "════════════════════════════════════════════════════════"
-call :log "📋 Installation Summary"
+call :log "📋 Final Installation Summary"
 call :log "════════════════════════════════════════════════════════"
 call :log ""
 
 if "%DOTNET_STATUS%"=="INSTALLED" set "DOTNET_SYMBOL=✔"
-if "%DOTNET_STATUS%"=="SKIPPED" set "DOTNET_SYMBOL=✔"
 if "%DOTNET_STATUS%"=="USER_SKIPPED" set "DOTNET_SYMBOL=~"
 if "%DOTNET_STATUS%"=="FAILED" set "DOTNET_SYMBOL=✖"
 
 if "%VCREDIST_X64_STATUS%"=="INSTALLED" set "VC64_SYMBOL=✔"
-if "%VCREDIST_X64_STATUS%"=="SKIPPED" set "VC64_SYMBOL=✔"
 if "%VCREDIST_X64_STATUS%"=="USER_SKIPPED" set "VC64_SYMBOL=~"
 if "%VCREDIST_X64_STATUS%"=="FAILED" set "VC64_SYMBOL=✖"
 
 if "%VCREDIST_X86_STATUS%"=="INSTALLED" set "VC86_SYMBOL=✔"
-if "%VCREDIST_X86_STATUS%"=="SKIPPED" set "VC86_SYMBOL=✔"
 if "%VCREDIST_X86_STATUS%"=="USER_SKIPPED" set "VC86_SYMBOL=~"
 if "%VCREDIST_X86_STATUS%"=="FAILED" set "VC86_SYMBOL=✖"
 if "%VCREDIST_X86_STATUS%"=="INSTALLED (REBOOT REQUIRED)" set "VC86_SYMBOL=⚠"
 
 if "%WEBVIEW2_STATUS%"=="INSTALLED" set "WV2_SYMBOL=✔"
-if "%WEBVIEW2_STATUS%"=="SKIPPED" set "WV2_SYMBOL=✔"
 if "%WEBVIEW2_STATUS%"=="USER_SKIPPED" set "WV2_SYMBOL=~"
 if "%WEBVIEW2_STATUS%"=="FAILED" set "WV2_SYMBOL=✖"
 
 if "%DIRECTX_STATUS%"=="INSTALLED" set "DX_SYMBOL=✔"
-if "%DIRECTX_STATUS%"=="SKIPPED" set "DX_SYMBOL=✔"
 if "%DIRECTX_STATUS%"=="USER_SKIPPED" set "DX_SYMBOL=~"
 if "%DIRECTX_STATUS%"=="FAILED" set "DX_SYMBOL=✖"
 
 if "%NDP481_STATUS%"=="INSTALLED" set "NDP_SYMBOL=✔"
-if "%NDP481_STATUS%"=="SKIPPED" set "NDP_SYMBOL=✔"
 if "%NDP481_STATUS%"=="USER_SKIPPED" set "NDP_SYMBOL=~"
 if "%NDP481_STATUS%"=="FAILED" set "NDP_SYMBOL=✖"
 
@@ -406,7 +321,7 @@ call :log "%WV2_SYMBOL% WebView2 Runtime               → %WEBVIEW2_STATUS%"
 call :log "%DX_SYMBOL% DirectX Runtime                → %DIRECTX_STATUS%"
 call :log "%NDP_SYMBOL% .NET Framework 4.8.1           → %NDP481_STATUS%"
 call :log ""
-call :log "🎉 All dependencies installed or already up-to-date!"
+call :log "🎉 Installation process completed!"
 call :log "📁 Log saved at:"
 call :log "    %LOGFILE%"
 call :log ""
@@ -423,6 +338,12 @@ echo Made by sysdriver but heavily modified and optimized by nerfine
 echo.
 
 echo [%date%] Installation completed. Reboot required: %REBOOT_REQUIRED% >> "%LOGFILE%"
+
+echo.
+echo ==============================
+echo Process Complete
+echo ==============================
+echo.
 
 if "%REBOOT_REQUIRED%"=="1" (
     call :log "[INFO] Installation completed. Reboot required. Closing in 5 seconds..."
@@ -455,26 +376,24 @@ exit /b 0
 :install_dotnet_runtime
 call :log "    [↓] Downloading..."
 set "DOTNET_INSTALLER=%TEMPDIR%\dotnet_runtime_%UUID%.exe"
-set "DOTNET_URL="
 
-for /f "usebackq delims=" %%A in (`powershell -NoProfile -Command ^
-    "$json = Invoke-RestMethod 'https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/8.0/releases.json';" ^
-    "$latest = $json.releases | Where-Object { $_.release.version -match '^8\.' } | Sort-Object { [version]$_.release.version } -Descending | Select-Object -First 1;" ^
-    "$url = $latest.windowsdesktop.runtime.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -like '*.exe' } | Select-Object -First 1 -ExpandProperty url;" ^
-    "if (-not [string]::IsNullOrWhiteSpace($url)) { Write-Output $url }"` ) do (
-    set "DOTNET_URL=%%A"
-)
+set "RETRIES=3"
+set "COUNT=0"
 
-if "%DOTNET_URL%"=="" (
-    call :log "    [⚠] Could not determine latest .NET 8.0 Desktop Runtime from metadata."
-    call :log "    [!] Using fallback URL..."
-    set "DOTNET_URL=https://download.visualstudio.microsoft.com/download/pr/105b0f6d-d3b9-4a41-a78b-321cb74a44a0/e287dc267a9c67ea23834d06239e6e7a/windowsdesktop-runtime-8.0.7-win-x64.exe"
-)
-
-call :log "    [!] Latest .NET Desktop Runtime 8.0 x64 URL: %DOTNET_URL%"
+:retry_dotnet_download
+set /a COUNT+=1
+if %COUNT% GTR 1 call :log "    [↻] Retry attempt %COUNT%/%RETRIES%..."
 powershell -Command "try { Invoke-WebRequest -Uri '%DOTNET_URL%' -OutFile '%DOTNET_INSTALLER%' -TimeoutSec 60 -UseBasicParsing } catch { Write-Host '[ERROR] Download failed:' $_.Exception.Message; exit 1 }"
 
 if exist "%DOTNET_INSTALLER%" (
+    call :validate_sha256 "%DOTNET_INSTALLER%" "%DOTNET_SHA256%"
+    if errorlevel 1 (
+        call :log "    [✖] SHA256 validation failed"
+        del /f /q "%DOTNET_INSTALLER%"
+        set "DOTNET_STATUS=FAILED"
+        exit /b 11
+    )
+    
     call :log "    [⚙] Installing..."
     "%DOTNET_INSTALLER%" /install /quiet /norestart
     if errorlevel 1 (
@@ -487,13 +406,20 @@ if exist "%DOTNET_INSTALLER%" (
     set "DOTNET_STATUS=INSTALLED"
     exit /b 0
 ) else (
-    call :log "    [✖] Download failed."
-    set "DOTNET_STATUS=FAILED"
-    exit /b 11
+    if %COUNT% LSS %RETRIES% (
+        call :log "    [⚠] Download attempt %COUNT% failed. Retrying..."
+        goto retry_dotnet_download
+    ) else (
+        call :log "    [✖] Download failed after %RETRIES% attempts."
+        set "DOTNET_STATUS=FAILED"
+        exit /b 11
+    )
 )
 
 :cleanup
 if exist "%~1" del /f /q "%~1"
+if exist "%~1.log" del /f /q "%~1.log"
+if exist "%~1.temp" rmdir /s /q "%~1.temp"
 exit /b 0
 
 :validate_sha256
@@ -521,3 +447,261 @@ if /i "%ACTUAL_HASH%"=="%EXPECTED_HASH%" (
     call :log "    Actual:   %ACTUAL_HASH%"
     exit /b 1
 )
+
+:check_all_dependencies
+if "%INSTALL_DOTNET%"=="0" (
+    call :log "[1/6] .NET Desktop Runtime 8.0"
+    call :log "    [~] Skipped by user (--no-dotnet)"
+    set "DOTNET_STATUS=USER_SKIPPED"
+) else (
+    call :log "[1/6] .NET Desktop Runtime 8.0"
+    call :log "    [🔍] Checking..."
+    reg query "HKLM\SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\WindowsDesktop" | find "8.0" >nul
+    if %errorlevel%==0 (
+        call :log "    [✔] Found installed version."
+        set "DOTNET_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "DOTNET_STATUS=MISSING"
+    )
+)
+
+if "%INSTALL_VCREDIST_X64%"=="0" (
+    call :log "[2/6] VC++ Redistributable x64"
+    call :log "    [~] Skipped by user (--no-vcredist)"
+    set "VCREDIST_X64_STATUS=USER_SKIPPED"
+) else (
+    call :log "[2/6] VC++ Redistributable x64"
+    call :log "    [🔍] Checking..."
+    reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" >nul 2>&1
+    if %errorlevel%==0 (
+        call :log "    [✔] Found installed version."
+        set "VCREDIST_X64_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "VCREDIST_X64_STATUS=MISSING"
+    )
+)
+
+if "%INSTALL_VCREDIST_X86%"=="0" (
+    call :log "[3/6] VC++ Redistributable x86"
+    call :log "    [~] Skipped by user (--no-vcredist)"
+    set "VCREDIST_X86_STATUS=USER_SKIPPED"
+) else (
+    call :log "[3/6] VC++ Redistributable x86"
+    call :log "    [🔍] Checking..."
+    reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" >nul 2>&1
+    if %errorlevel%==0 (
+        call :log "    [✔] Found installed version."
+        set "VCREDIST_X86_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "VCREDIST_X86_STATUS=MISSING"
+    )
+)
+
+if "%INSTALL_WEBVIEW2%"=="0" (
+    call :log "[4/6] WebView2 Runtime"
+    call :log "    [~] Skipped by user (--no-webview2)"
+    set "WEBVIEW2_STATUS=USER_SKIPPED"
+) else (
+    call :log "[4/6] WebView2 Runtime"
+    call :log "    [🔍] Checking..."
+    reg query "HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F4A5B3DC-0E5D-4C0A-836E-4AD7EA73D1B2}" >nul 2>&1
+    if %errorlevel%==0 (
+        call :log "    [✔] Found installed version."
+        set "WEBVIEW2_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "WEBVIEW2_STATUS=MISSING"
+    )
+)
+
+if "%INSTALL_DIRECTX%"=="0" (
+    call :log "[5/6] DirectX Runtime"
+    call :log "    [~] Skipped by user (--no-directx)"
+    set "DIRECTX_STATUS=USER_SKIPPED"
+) else (
+    call :log "[5/6] DirectX Runtime"
+    call :log "    [🔍] Checking..."
+    if exist "%WINDIR%\System32\D3DX9_43.dll" (
+        call :log "    [✔] Found installed version."
+        set "DIRECTX_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "DIRECTX_STATUS=MISSING"
+    )
+)
+
+if "%INSTALL_NDP481%"=="0" (
+    call :log "[6/6] .NET Framework 4.8.1"
+    call :log "    [~] Skipped by user (--no-framework)"
+    set "NDP481_STATUS=USER_SKIPPED"
+) else (
+    call :log "[6/6] .NET Framework 4.8.1"
+    call :log "    [🔍] Checking..."
+    reg query "HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" /v Release | findstr /r /c:"53332[0-9]" >nul
+    if %errorlevel%==0 (
+        call :log "    [✔] Found installed version."
+        set "NDP481_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "NDP481_STATUS=MISSING"
+    )
+)
+exit /b 0
+
+:display_check_summary
+if "%DOTNET_STATUS%"=="INSTALLED" set "DOTNET_SYMBOL=✔"
+if "%DOTNET_STATUS%"=="USER_SKIPPED" set "DOTNET_SYMBOL=~"
+if "%DOTNET_STATUS%"=="MISSING" set "DOTNET_SYMBOL=✖"
+
+if "%VCREDIST_X64_STATUS%"=="INSTALLED" set "VC64_SYMBOL=✔"
+if "%VCREDIST_X64_STATUS%"=="USER_SKIPPED" set "VC64_SYMBOL=~"
+if "%VCREDIST_X64_STATUS%"=="MISSING" set "VC64_SYMBOL=✖"
+
+if "%VCREDIST_X86_STATUS%"=="INSTALLED" set "VC86_SYMBOL=✔"
+if "%VCREDIST_X86_STATUS%"=="USER_SKIPPED" set "VC86_SYMBOL=~"
+if "%VCREDIST_X86_STATUS%"=="MISSING" set "VC86_SYMBOL=✖"
+
+if "%WEBVIEW2_STATUS%"=="INSTALLED" set "WV2_SYMBOL=✔"
+if "%WEBVIEW2_STATUS%"=="USER_SKIPPED" set "WV2_SYMBOL=~"
+if "%WEBVIEW2_STATUS%"=="MISSING" set "WV2_SYMBOL=✖"
+
+if "%DIRECTX_STATUS%"=="INSTALLED" set "DX_SYMBOL=✔"
+if "%DIRECTX_STATUS%"=="USER_SKIPPED" set "DX_SYMBOL=~"
+if "%DIRECTX_STATUS%"=="MISSING" set "DX_SYMBOL=✖"
+
+if "%NDP481_STATUS%"=="INSTALLED" set "NDP_SYMBOL=✔"
+if "%NDP481_STATUS%"=="USER_SKIPPED" set "NDP_SYMBOL=~"
+if "%NDP481_STATUS%"=="MISSING" set "NDP_SYMBOL=✖"
+
+call :log "%DOTNET_SYMBOL% .NET Desktop Runtime 8.0       → %DOTNET_STATUS%"
+call :log "%VC64_SYMBOL% VC++ Redistributable x64         → %VCREDIST_X64_STATUS%"
+call :log "%VC86_SYMBOL% VC++ Redistributable x86         → %VCREDIST_X86_STATUS%"
+call :log "%WV2_SYMBOL% WebView2 Runtime               → %WEBVIEW2_STATUS%"
+call :log "%DX_SYMBOL% DirectX Runtime                → %DIRECTX_STATUS%"
+call :log "%NDP_SYMBOL% .NET Framework 4.8.1           → %NDP481_STATUS%"
+exit /b 0
+
+:install_vcredist_x64
+call :log "    [↓] Downloading..."
+powershell -Command "Invoke-WebRequest -Uri '%VCREDIST_X64_URL%' -OutFile '%VCREDIST_X64%' -TimeoutSec 30 -UseBasicParsing"
+
+call :validate_sha256 "%VCREDIST_X64%" "%VCREDIST_X64_SHA256%"
+if errorlevel 1 (
+    call :log "    [✖] SHA256 validation failed"
+    del /f /q "%VCREDIST_X64%"
+    set "VCREDIST_X64_STATUS=FAILED"
+    exit /b 12
+)
+
+call :log "    [⚙] Installing..."
+"%VCREDIST_X64%" /install /quiet /norestart
+if errorlevel 1 (
+    call :log "    [✖] Installation failed."
+    set "VCREDIST_X64_STATUS=FAILED"
+    exit /b 12
+)
+call :cleanup "%VCREDIST_X64%"
+call :log "    [✔] Installed successfully."
+set "VCREDIST_X64_STATUS=INSTALLED"
+exit /b 0
+
+:install_vcredist_x86
+call :log "    [↓] Downloading..."
+powershell -Command "Invoke-WebRequest -Uri '%VCREDIST_X86_URL%' -OutFile '%VCREDIST_X86%' -TimeoutSec 30 -UseBasicParsing"
+
+call :validate_sha256 "%VCREDIST_X86%" "%VCREDIST_X86_SHA256%"
+if errorlevel 1 (
+    call :log "    [✖] SHA256 validation failed"
+    del /f /q "%VCREDIST_X86%"
+    set "VCREDIST_X86_STATUS=FAILED"
+    exit /b 13
+)
+
+call :log "    [⚙] Installing..."
+"%VCREDIST_X86%" /install /quiet /norestart > "%TEMPDIR%\vcredist_x86_install.log" 2>&1
+echo [DEBUG] VC++ Redist x86 installer exit code: !errorlevel!
+if "!errorlevel!"=="3010" (
+    call :log "    [⚠] Installed. Reboot required."
+    set "VCREDIST_X86_STATUS=INSTALLED (REBOOT REQUIRED)"
+    set "REBOOT_REQUIRED=1"
+) else if not "!errorlevel!"=="0" (
+    call :log "    [✖] Installation failed. See log for details."
+    set "VCREDIST_X86_STATUS=FAILED"
+    exit /b 13
+) else (
+    call :log "    [✔] Installed successfully. (Exit Code: 0)"
+    set "VCREDIST_X86_STATUS=INSTALLED"
+)
+call :cleanup "%VCREDIST_X86%"
+exit /b 0
+
+:install_webview2
+call :log "    [↓] Downloading..."
+powershell -Command "Invoke-WebRequest -Uri '%WEBVIEW2_URL%' -OutFile '%WEBVIEW2%' -MaximumRedirection 5 -TimeoutSec 60 -UseBasicParsing"
+
+if not exist "%WEBVIEW2%" (
+    call :log "    [✖] Download failed."
+    exit /b 14
+)
+for /f "tokens=*" %%F in ('more "%WEBVIEW2%" ^| findstr /i "<html"') do (
+    call :log "    [✖] Download failed - received HTML instead of EXE."
+    del /f /q "%WEBVIEW2%"
+    exit /b 14
+)
+for %%F in ("%WEBVIEW2%") do (
+    if %%~zF lss 100000 (
+        call :log "    [✖] Download incomplete. File too small."
+        del /f /q "%WEBVIEW2%"
+        exit /b 14
+    )
+)
+
+call :log "    [⚙] Installing..."
+"%WEBVIEW2%" /install /quiet /norestart /log:"%TEMPDIR%\webview2_setup.log"
+if errorlevel 1 (
+    call :log "    [✖] Installation failed."
+    exit /b 14
+)
+del /f /q "%WEBVIEW2%"
+call :log "    [✔] Installed."
+set "WEBVIEW2_STATUS=INSTALLED"
+exit /b 0
+
+:install_directx
+call :log "    [↓] Downloading..."
+powershell -Command "Invoke-WebRequest -Uri '%DIRECTX_URL%' -OutFile '%DXREDIST%' -TimeoutSec 60 -UseBasicParsing"
+call :log "    [⚙] Extracting DXSetup..."
+"%DXREDIST%" /Q /T "%TEMPDIR%\directx_temp"
+if exist "%TEMPDIR%\directx_temp\DXSETUP.exe" (
+    call :log "    [⚙] Installing DirectX components..."
+    "%TEMPDIR%\directx_temp\DXSETUP.exe" /silent
+)
+del /f /q "%DXREDIST%"
+rmdir /s /q "%TEMPDIR%\directx_temp"
+call :log "    [✔] Installed."
+set "DIRECTX_STATUS=INSTALLED"
+exit /b 0
+
+:install_ndp481
+call :log "    [↓] Downloading..."
+powershell -Command "Invoke-WebRequest -Uri '%NDP481_URL%' -OutFile '%NDP481%' -TimeoutSec 60 -UseBasicParsing"
+if exist "%NDP481%" (
+    call :log "    [⚙] Installing..."
+    "%NDP481%" /q /norestart
+    if errorlevel 1 (
+        call :log "    [✖] Installation failed."
+        set "NDP481_STATUS=FAILED"
+        exit /b 15
+    )
+    del /f /q "%NDP481%"
+    call :log "    [✔] Installed with all components prepared."
+    set "NDP481_STATUS=INSTALLED"
+) else (
+    call :log "    [✖] Download failed."
+    set "NDP481_STATUS=FAILED"
+    exit /b 15
+)
+exit /b 0
