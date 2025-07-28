@@ -632,13 +632,19 @@ Users may encounter a white screen, blank window, or completely unresponsive int
 <summary>Premade Support Message</summary>
 
 ```
-Hi! A white screen in Bunni is almost always a WebView2 issue. Here's how to fix it:
+Hi! If you're having a WebView2 issue. Here's how to fix it:
 
 **Quick Fix - Try this first:**
 1. We have an automated fix script called `fix_webview2.bat`
 2. Right-click on it and select "Run as administrator"
 3. Let it complete, then restart your PC
 4. Try launching Bunni again
+
+**After the script finishes, it will create a log file here:**
+
+* Press **Win + R** and enter: `%TEMP%\webview2_fix\`
+* Look for a file named something like: `webview2_fix_XXXXXXXX_XXXXXX.log`
+* Please send **that log file** in the chat if the issue continues. It helps us troubleshoot.
 
 **If that doesn't work, manual fix:**
 
