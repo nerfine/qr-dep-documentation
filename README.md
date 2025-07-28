@@ -60,12 +60,6 @@ depinstaller_XXXXXXXX_XXXXXX.log
 
 **Ask users to send this log file in the support chat.** It helps us troubleshoot quickly.
 
-══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-
-```
-
-</details>
-
 ═══════════════════════════════════════════════════════════════════════
 
 ## Common Issue: Winget Not Found
