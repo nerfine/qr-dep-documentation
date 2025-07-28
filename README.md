@@ -3,39 +3,44 @@
 
 This guide is for the **support team** assisting users with the `.qr-dep` installer.
 
-## Table of Contents
+## 📋 Table of Contents
 
+### 🚀 Getting Started
 - [Running the Installer](#running-the-installer)
-- [Common Issue: Winget Not Found](#common-issue-winget-not-found)
+
+### ⚠️ Common Issues
+- [Winget Not Found](#common-issue-winget-not-found)
   - [Step 1: Download Required Files (ALL 3)](#step-1-download-required-files-all-3)
   - [Step 2: Verify Winget Installation](#step-2-verify-winget-installation)
   - [Step 3: Rerun the .bat Installer](#step-3-rerun-the-bat-installer)
-- [Still Not Working?](#still-not-working)
-- [Issue: WebView2 Installation Error - 0x80040c01](#issue-webview2-installation-error---0x80040c01)
-  - [Description](#description)
-  - [Workaround](#workaround)
-- [Common Dependency Installation Issues](#common-dependency-installation-issues)
-  - [Issue: .NET Desktop Runtime Installation Fails](#issue-net-desktop-runtime-installation-fails)
-  - [Issue: Visual C++ Redistributable Installation Fails (MSVCP140.dll/VCRUNTIME140.dll)](#issue-visual-c-redistributable-installation-fails)
-  - [Issue: DirectX Runtime Installation Problems](#issue-directx-runtime-installation-problems)
-  - [Issue: .NET Framework 4.8.1 Installation Problems](#issue-net-framework-481-installation-problems)
-  - [Issue: Script Requires Admin Rights](#issue-script-requires-admin-rights)
-  - [Issue: Antivirus Interference](#issue-antivirus-interference)
-  - [Issue: Network/Firewall Problems](#issue-networkfirewall-problems)
-  - [Issue: Corrupted Downloads](#issue-corrupted-downloads)
-  - [Issue: Windows Updates Required](#issue-windows-updates-required)
+  - [Still Not Working?](#still-not-working)
+- [WebView2 Installation Error - 0x80040c01](#issue-webview2-installation-error---0x80040c01)
+- [Bunni Shows White Screen or Won't Load](#issue-bunni-shows-white-screen-or-wont-load)
+
+### 🔧 Dependency Installation Issues
+- [.NET Desktop Runtime Installation Fails](#issue-net-desktop-runtime-installation-fails)
+- [Visual C++ Redistributable Installation Fails](#issue-visual-c-redistributable-installation-fails)
+- [DirectX Runtime Installation Problems](#issue-directx-runtime-installation-problems)
+- [.NET Framework 4.8.1 Installation Problems](#issue-net-framework-481-installation-problems)
+- [Script Requires Admin Rights](#issue-script-requires-admin-rights)
+- [Antivirus Interference](#issue-antivirus-interference)
+- [Network/Firewall Problems](#issue-networkfirewall-problems)
+- [Corrupted Downloads](#issue-corrupted-downloads)
+- [Windows Updates Required](#issue-windows-updates-required)
+
+### 🩺 Advanced Troubleshooting
 - [Troubleshooting Flowchart](#troubleshooting-flowchart)
-  - [Step 1: Check Basic Requirements](#step-1-check-basic-requirements)
-  - [Step 2: Identify the Failure Point](#step-2-identify-the-failure-point)
-  - [Step 3: Match Error to Solution](#step-3-match-error-to-solution)
-  - [Step 4: Log File Analysis](#step-4-log-file-analysis)
 - [Emergency Fallback: Complete Manual Installation](#emergency-fallback-complete-manual-installation)
-  - [Required Downloads (in order)](#required-downloads-in-order)
-  - [Installation Order](#installation-order)
-  - [Verification Steps](#verification-steps)
 - [Advanced Troubleshooting Commands](#advanced-troubleshooting-commands)
+
+### 📖 Manual Installation Guide
 - [Option 2: Manual Dependency Installation](#option-2-manual-dependency-installation)
+
+### 📞 Support Resources
+- [Quick Support Reference Card](#quick-support-reference-card)
 - [Need Help?](#need-help)
+
+═══════════════════════════════════════════════════════════════════════
 
 ## Running the Installer
 
@@ -55,7 +60,13 @@ depinstaller_XXXXXXXX_XXXXXX.log
 
 **Ask users to send this log file in the support chat.** It helps us troubleshoot quickly.
 
-────────────────────────────────────────────────────────────────────────────────
+══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+```
+
+</details>
+
+═══════════════════════════════════════════════════════════════════════
 
 ## Common Issue: Winget Not Found
 
@@ -69,9 +80,9 @@ If users see this error:
 
 They must try to download **all three files**, even if some do not install properly:
 
-- [Microsoft.VCLibs.x64.14.00.Desktop.appx](https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx)  
-- [Microsoft.UI.Xaml 2.7.0 Package](https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.0)  
-- [App Installer (includes Winget)](https://aka.ms/getwinget)  
+- <https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx>  
+- <https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.0>  
+- <https://aka.ms/getwinget>  
 
 ### Step 2: Verify Winget Installation
 
@@ -115,9 +126,9 @@ No worries! Winget isn't installed on your system. Here are two ways to fix this
 
 **Option 2 - Install Winget:**
 1. Download these 3 files (try all of them even if some don't install):
-   - https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx
-   - https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.0
-   - https://aka.ms/getwinget
+   - <https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx>
+   - <https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.0>
+   - <https://aka.ms/getwinget>
 
 2. After installing, open PowerShell as admin and run: `winget --version`
 3. If you see a version number, try the original installer again
@@ -127,7 +138,7 @@ We'd recommend trying Option 1 first since it's simpler!
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Issue: WebView2 Installation Error - `0x80040c01`
 
@@ -144,7 +155,7 @@ This error is often caused by problems with the **Evergreen bootstrapper** insta
 ### Workaround
 
 1. **Use the full offline installer** instead of the bootstrapper:
-   - Download from: https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
+   - Download from: <https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section>
    - Choose the **Evergreen Standalone Installer** (usually around 90MB)
 
 2. **Clear existing WebView2 installations**:
@@ -167,7 +178,7 @@ Hi! That's a known WebView2 error. Here's the exact fix:
    - Uninstall any WebView2 entries you find
 
 2. Download the correct installer:
-   - Go to: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+   - Go to: <https://developer.microsoft.com/en-us/microsoft-edge/webview2/>
    - Download "Evergreen Standalone Installer" (the big 90MB file, NOT the small bootstrapper)
 
 3. Install it:
@@ -183,7 +194,7 @@ Let us know if you run into any issues with these steps.
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Common Dependency Installation Issues
 
@@ -195,7 +206,7 @@ Let us know if you run into any issues with these steps.
 
 **Solutions:**
 1. **Manual Installation:**
-   - Download directly from: https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime
+   - Download directly from: <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime>
    - Choose "Desktop Runtime x64" for most systems
    - Run as Administrator
 
@@ -216,7 +227,7 @@ The .NET Runtime installation hit an issue. Let's fix this:
 
 **Quick Fix:**
 1. Download .NET 8.0 Desktop Runtime manually from:
-   https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime
+   <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime>
 
 2. On that page, click "Download x64" under "Desktop Runtime 8.0.x"
 
@@ -237,7 +248,7 @@ Let us know if the manual installation works or if you need help with Windows up
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 ### Issue: Visual C++ Redistributable Installation Fails
 
@@ -251,8 +262,8 @@ Let us know if the manual installation works or if you need help with Windows up
 
 **Solutions:**
 1. **Download latest versions manually:**
-   - x64: https://aka.ms/vs/17/release/vc_redist.x64.exe
-   - x86: https://aka.ms/vs/17/release/vc_redist.x86.exe
+   - x64: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+   - x86: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
 
 2. **Uninstall existing versions first:**
    - Go to Control Panel > Programs
@@ -274,8 +285,8 @@ The Visual C++ components failed to install, or you're getting an MSVCP140.dll o
 This means Visual C++ Redistributable is missing or corrupted. The fix below will resolve this.
 
 **Download both of these:**
-1. VC++ x64: https://aka.ms/vs/17/release/vc_redist.x64.exe
-2. VC++ x86: https://aka.ms/vs/17/release/vc_redist.x86.exe
+1. VC++ x64: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+2. VC++ x86: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
 
 **Before installing:**
 - Go to Control Panel > Programs and Features
@@ -300,7 +311,7 @@ This clean install approach usually fixes VC++ issues and MSVCP140.dll/VCRUNTIME
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 ### Issue: DirectX Runtime Installation Problems
 
@@ -310,7 +321,7 @@ This clean install approach usually fixes VC++ issues and MSVCP140.dll/VCRUNTIME
 
 **Solutions:**
 1. **Manual DirectX Installation:**
-   - Download: https://www.microsoft.com/en-us/download/details.aspx?id=35
+   - Download: <https://www.microsoft.com/en-us/download/details.aspx?id=35>
    - Extract and run DXSETUP.exe as Administrator
 
 2. **Check for Windows Updates:**
@@ -324,7 +335,7 @@ This clean install approach usually fixes VC++ issues and MSVCP140.dll/VCRUNTIME
 DirectX installation failed. This happens sometimes on older Windows systems. Let's install it manually:
 
 **Download DirectX End-User Runtime:**
-https://www.microsoft.com/en-us/download/details.aspx?id=35
+<https://www.microsoft.com/en-us/download/details.aspx?id=35>
 
 **Installation steps:**
 1. Download the file
@@ -340,7 +351,7 @@ If you're on Windows 10/11, DirectX should already be built-in, so this error mi
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 ### Issue: .NET Framework 4.8.1 Installation Problems
 
@@ -359,7 +370,7 @@ If you're on Windows 10/11, DirectX should already be built-in, so this error mi
    - Skip this component
 
 3. **Manual installation:**
-   - Download: https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481
+   - Download: <https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481>
 
 ### Issue: Script Requires Admin Rights
 
@@ -402,7 +413,7 @@ The script needs admin rights because it's installing system-level components li
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 ### Issue: Antivirus Interference
 
@@ -448,10 +459,10 @@ It looks like the downloads are failing due to network/firewall issues
 **If downloads keep failing, do manual installation:**
 
 **Download these files manually:**
-1. .NET 8 Desktop Runtime: https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe
-2. WebView2: https://go.microsoft.com/fwlink/p/?LinkId=2124703
-3. VC++ x64: https://aka.ms/vs/17/release/vc_redist.x64.exe
-4. VC++ x86: https://aka.ms/vs/17/release/vc_redist.x86.exe
+1. .NET 8 Desktop Runtime: <https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe>
+2. WebView2: <https://go.microsoft.com/fwlink/p/?LinkId=2124703>
+3. VC++ x64: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+4. VC++ x86: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
 
 **Installation order:**
 1. Install .NET 8 Desktop Runtime first
@@ -465,7 +476,7 @@ We know this is annoying, but some corporate firewalls or antivirus programs blo
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 ### Issue: Corrupted Downloads
 
@@ -501,17 +512,17 @@ Run depinstaller_fixed.bat again. It will download fresh copies of everything.
 Your internet connection might be unstable. Try:
 1. Using a different network (mobile hotspot, etc.)
 2. Downloading one component at a time manually:
-   - .NET 8: https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe
-   - WebView2: https://go.microsoft.com/fwlink/p/?LinkId=2124703
-   - VC++ x64: https://aka.ms/vs/17/release/vc_redist.x64.exe
-   - VC++ x86: https://aka.ms/vs/17/release/vc_redist.x86.exe
+   - .NET 8: <https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe>
+   - WebView2: <https://go.microsoft.com/fwlink/p/?LinkId=2124703>
+   - VC++ x64: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+   - VC++ x86: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
 
 Let us know if the problem persists. We might need to send you a pre-packaged installer.
 ```
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 ### Issue: Windows Updates Required
 
@@ -559,7 +570,120 @@ If you're on Windows 7 or 8, those are no longer supported by Microsoft, and mod
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
+
+## Issue: Bunni Shows White Screen or Won't Load
+
+### Description
+
+Users may encounter a white screen, blank window, or completely unresponsive interface when launching Bunni. This is typically caused by missing or corrupted WebView2 components.
+
+### Common Causes:
+1. **WebView2 Runtime not installed** - Most common cause
+2. **Corrupted WebView2 installation** - Partially installed or damaged
+3. **Conflicting WebView2 versions** - Multiple versions causing conflicts
+4. **Missing Visual C++ Redistributables** - Required by WebView2
+5. **Outdated Windows version** - WebView2 requires specific Windows updates
+6. **Antivirus blocking WebView2** - Some security software interferes
+
+### Solutions:
+
+**Method 1: Use the automated fix script**
+1. Run `fix_webview2.bat` as Administrator
+2. The script will automatically try multiple solutions
+3. Restart your PC after completion
+
+**Method 2: Manual WebView2 reinstallation**
+1. **Remove existing WebView2:**
+   - Go to Settings > Apps & features
+   - Search for "Microsoft Edge WebView2"
+   - Uninstall ALL WebView2 entries you find
+   - Restart your PC
+
+2. **Download and install fresh WebView2:**
+   - Visit: <https://developer.microsoft.com/microsoft-edge/webview2/>
+   - Download "Evergreen Standalone Installer" (90MB+ file)
+   - Run as Administrator
+   - Restart your PC
+
+**Method 3: Check dependencies**
+1. Ensure Visual C++ Redistributables are installed:
+   - Download: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+   - Download: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
+   - Install both as Administrator
+
+2. Update Windows to latest version
+3. Run Windows Update until no more updates available
+
+**Method 4: Edge reinstall workaround (if WebView2 installers fail)**
+1. Download and reinstall Microsoft Edge:
+   - Go to: <https://www.microsoft.com/edge/download>
+   - Download and install the latest version
+   - Restart your PC after installation
+
+2. Copy Edge folder to create EdgeWebView:
+   - Navigate to: `C:\Program Files (x86)\Microsoft\`
+   - Copy the entire `Edge` folder
+   - Paste it in the same location
+   - Rename the copied folder from `Edge - Copy` to `EdgeWebView`
+   - Try launching Bunni again
+
+**Method 5: Check for interfering software**
+1. Temporarily disable antivirus real-time protection
+2. Try launching Bunni
+3. If it works, add Bunni to antivirus exclusions
+4. Re-enable antivirus protection
+
+<details>
+<summary>Premade Support Message</summary>
+
+```
+Hi! A white screen in Bunni is almost always a WebView2 issue. Here's how to fix it:
+
+**Quick Fix - Try this first:**
+1. We have an automated fix script called `fix_webview2.bat`
+2. Right-click on it and select "Run as administrator"
+3. Let it complete, then restart your PC
+4. Try launching Bunni again
+
+**If that doesn't work, manual fix:**
+
+**Step 1: Remove old WebView2**
+1. Go to Settings > Apps & features
+2. Search for "Microsoft Edge WebView2"
+3. Uninstall EVERYTHING that shows up with "WebView2" in the name
+4. Restart your PC
+
+**Step 2: Install fresh WebView2**
+1. Go to: <https://developer.microsoft.com/microsoft-edge/webview2/>
+2. Download "Evergreen Standalone Installer" (the big 90MB+ file)
+3. Right-click the downloaded file → "Run as administrator"
+4. Let it install completely
+5. Restart your PC again
+
+**Step 3: Test Bunni**
+Try launching Bunni now. It should load properly.
+
+**If WebView2 installer fails, try the Edge workaround:**
+1. Download and reinstall Microsoft Edge from: <https://www.microsoft.com/edge/download>
+2. After installation, go to: C:\Program Files (x86)\Microsoft\
+3. Copy the "Edge" folder and paste it in the same location
+4. Rename the copied folder from "Edge - Copy" to "EdgeWebView"
+5. Restart your PC and try Bunni again
+
+**If you still get a white screen:**
+- Make sure Windows is fully updated (Settings > Windows Update)
+- Check if your antivirus is blocking Bunni (try disabling temporarily)
+- Run our dependency installer: `depinstaller-nowinget.bat`
+
+The white screen happens because Bunni uses WebView2 to display its interface, and when WebView2 is missing or broken, you just get a blank window.
+
+Let us know if you need help with any of these steps!
+```
+
+</details>
+
+═══════════════════════════════════════════════════════════════════════
 
 ## Troubleshooting Flowchart
 
@@ -588,6 +712,7 @@ Ask user to find the **exact error message** in the log file:
 | `Access denied` | Permissions | Run as Administrator |
 | `Download failed` | Network issue | Check firewall/antivirus |
 | `Installation failed` | Component issue | Manual installation required |
+| `White screen` or `Blank window` | WebView2 Issue | Run `fix_webview2.bat` or reinstall WebView2 |
 
 ### Step 4: Log File Analysis
 Key sections to check in the log:
@@ -596,19 +721,19 @@ Key sections to check in the log:
 3. **Installation results** - Component-specific failures
 4. **Error codes** - Specific failure reasons
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Emergency Fallback: Complete Manual Installation
 
 If the automated installer completely fails, provide users with this **complete manual installation guide**:
 
 ### Required Downloads (in order):
-1. **.NET Framework 4.8.1**: https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481
-2. **.NET 8.0 Desktop Runtime**: https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime (Choose "Desktop Runtime x64")
-3. **Visual C++ 2015-2022 x64**: https://aka.ms/vs/17/release/vc_redist.x64.exe
-4. **Visual C++ 2015-2022 x86**: https://aka.ms/vs/17/release/vc_redist.x86.exe
-5. **WebView2 Runtime**: https://developer.microsoft.com/en-us/microsoft-edge/webview2/ (Evergreen Standalone Installer)
-6. **DirectX End-User Runtime**: https://www.microsoft.com/en-us/download/details.aspx?id=35
+1. **.NET Framework 4.8.1**: <https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481>
+2. **.NET 8.0 Desktop Runtime**: <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime> (Choose "Desktop Runtime x64")
+3. **Visual C++ 2015-2022 x64**: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
+4. **Visual C++ 2015-2022 x86**: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
+5. **WebView2 Runtime**: <https://developer.microsoft.com/en-us/microsoft-edge/webview2/> (Evergreen Standalone Installer)
+6. **DirectX End-User Runtime**: <https://www.microsoft.com/en-us/download/details.aspx?id=35>
 
 ### Installation Order:
 1. Install .NET Framework 4.8.1 first
@@ -639,26 +764,26 @@ The automatic installer is having multiple issues. Let's switch to completely ma
 **We need you to download and install these in this exact order:**
 
 1. **.NET Framework 4.8.1** (if needed):
-   https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481
+   <https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481>
 
 2. **Restart your PC** (important!)
 
 3. **.NET 8.0 Desktop Runtime**:
-   https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime
+   <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime>
    (Click "Download x64" under Desktop Runtime)
 
 4. **Visual C++ x64**:
-   https://aka.ms/vs/17/release/vc_redist.x64.exe
+   <https://aka.ms/vs/17/release/vc_redist.x64.exe>
 
 5. **Visual C++ x86**:
-   https://aka.ms/vs/17/release/vc_redist.x86.exe
+   <https://aka.ms/vs/17/release/vc_redist.x86.exe>
 
 6. **WebView2 Runtime**:
-   https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+   <https://developer.microsoft.com/en-us/microsoft-edge/webview2/>
    (Download "Evergreen Standalone Installer")
 
 7. **DirectX Runtime**:
-   https://www.microsoft.com/en-us/download/details.aspx?id=35
+   <https://www.microsoft.com/en-us/download/details.aspx?id=35>
 
 **Installation tips:**
 - Run each installer as Administrator (right-click → Run as admin)
@@ -671,7 +796,7 @@ This manual approach bypasses all the automatic installer issues. Let us know if
 
 </details>
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Advanced Troubleshooting Commands
 
@@ -706,7 +831,7 @@ del /f /q "%TEMP%\batch_installer\*.*"
 rmdir /s /q "%TEMP%\batch_installer"
 ```
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Option 2: Manual Dependency Installation
 
@@ -714,12 +839,12 @@ If the automatic dependency installer fails or the user prefers to install manua
 
 They must download and install **all** the following:
 
-- [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)  
-- [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
-- [Visual C++ Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)  
-- [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)  
-- [DirectX End-User Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)  
-- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+- <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime>  
+- <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist>  
+- <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist>  
+- <https://developer.microsoft.com/en-us/microsoft-edge/webview2/>  
+- <https://www.microsoft.com/en-us/download/details.aspx?id=35>  
+- <https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48>
 
 
 ## Option 2: Manual Dependency Installation (If Auto Installer Fails)
@@ -728,12 +853,12 @@ If the automatic `.bat` installer doesn't work, guide the user through manually 
 
 Ask them to install **each** of the following files manually:
 
-- [.NET Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
-- [Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
-- [Visual C++ Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
-- [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)
-- [DirectX End-User Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)
-- [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
+- <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime>
+- <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist>
+- <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist>
+- <https://developer.microsoft.com/en-us/microsoft-edge/webview2/>
+- <https://www.microsoft.com/en-us/download/details.aspx?id=35>
+- <https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48>
 
 Ask the user to restart their PC after installing everything. If they still experience issues, continue troubleshooting in chat.
 
@@ -768,7 +893,7 @@ Let us know if you run into any issues!
 - Make sure users **restart their PC** after installing all the dependencies  
 - They should test Bunni again only **after the restart**
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Quick Support Reference Card
 
@@ -777,6 +902,7 @@ Let us know if you run into any issues!
 | User Says... | Quick Response |
 |-------------|----------------|
 | "WebView2 error 0x80040c01" | Use standalone WebView2 installer from Microsoft |
+| "Bunni shows white screen" or "Bunni won't load" | Run `fix_webview2.bat` or reinstall WebView2 |
 | "Winget not found" | Use `depinstaller-nowinget.bat` instead |
 | "Access denied" | Run as Administrator (right-click → Run as admin) |
 | "Download failed" | Check antivirus/firewall, clear temp folder |
@@ -787,7 +913,7 @@ Let us know if you run into any issues!
 - **Log Location**: `%temp%\batch_installer\depinstaller_*.log`
 - **Manual Downloads**: All links provided in Option 2 section above
 
-────────────────────────────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════════════════
 
 ## Need Help?
 
