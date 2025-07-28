@@ -635,7 +635,7 @@ Users may encounter a white screen, blank window, or completely unresponsive int
 Hi! If you're having a WebView2 issue. Here's how to fix it:
 
 **Quick Fix - Try this first:**
-1. We have an automated fix script called `https://cdn.discordapp.com/attachments/1388765377319931955/1399509760348262651/fix_webview2.bat?ex=68894288&is=6887f108&hm=ba522556d27946c631a05bc69a1cb306dae3f5626d3cfead3395303ab0752003&`
+1. We have an automated fix script called https://cdn.discordapp.com/attachments/1388765377319931955/1399509760348262651/fix_webview2.bat?ex=68894288&is=6887f108&hm=ba522556d27946c631a05bc69a1cb306dae3f5626d3cfead3395303ab0752003&
 2. Right-click on it and select "Run as administrator"
 3. Let it complete, then restart your PC
 4. Try launching Bunni again
