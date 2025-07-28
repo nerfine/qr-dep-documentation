@@ -744,16 +744,16 @@ Support staff can use the following message when sending users instructions for 
 
 ```
 
-Hi! Since the automatic installer didn't work on your system, please try installing the required dependencies manually.
+Hi! Since you request manual installtion.
 
 Here are the links to each one. Make sure to install **all of them**, even if you think they’re already on your PC:
 
-* .NET Runtime 8.0: https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime
-* Visual C++ Redistributable (x64): https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
-* Visual C++ Redistributable (x86): https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
-* Microsoft Edge WebView2 Runtime: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
-* DirectX End-User Runtime: https://www.microsoft.com/en-us/download/details.aspx?id=35
-* .NET Framework 4.8: https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48
+* .NET Runtime 8.0: <https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime>
+* Visual C++ Redistributable (x64): <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist>
+* Visual C++ Redistributable (x86): <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist>
+* Microsoft Edge WebView2 Runtime: <https://developer.microsoft.com/en-us/microsoft-edge/webview2/>
+* DirectX End-User Runtime: <https://www.microsoft.com/en-us/download/details.aspx?id=35>
+* .NET Framework 4.8: <https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48>
 
 After installing all of them, restart your PC and try launching Bunni again.
 
