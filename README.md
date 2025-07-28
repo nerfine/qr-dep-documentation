@@ -15,7 +15,7 @@ This guide is for the **support team** assisting users with the `.qr-dep` instal
   - [Step 3: Rerun the .bat Installer](#step-3-rerun-the-bat-installer)
   - [Still Not Working?](#still-not-working)
 - [WebView2 Installation Error - 0x80040c01](#issue-webview2-installation-error---0x80040c01)
-- [Bunni Shows White Screen or Won't Load](#issue-bunni-shows-white-screen-or-wont-load)
+- [Bunni WebView2 Issue/Shows White Screen or Won't Load](#issue-bunni-shows-white-screen-or-wont-load)
 
 ### 🔧 Dependency Installation Issues
 - [.NET Desktop Runtime Installation Fails](#issue-net-desktop-runtime-installation-fails)
@@ -635,7 +635,7 @@ Users may encounter a white screen, blank window, or completely unresponsive int
 Hi! If you're having a WebView2 issue. Here's how to fix it:
 
 **Quick Fix - Try this first:**
-1. We have an automated fix script called `fix_webview2.bat`
+1. We have an automated fix script called `https://cdn.discordapp.com/attachments/1388765377319931955/1399509760348262651/fix_webview2.bat?ex=68894288&is=6887f108&hm=ba522556d27946c631a05bc69a1cb306dae3f5626d3cfead3395303ab0752003&`
 2. Right-click on it and select "Run as administrator"
 3. Let it complete, then restart your PC
 4. Try launching Bunni again
