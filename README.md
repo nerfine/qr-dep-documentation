@@ -19,7 +19,7 @@ This guide is for the **support team** assisting users with the `.qr-dep` instal
 
 ### 🔧 Dependency Installation Issues
 - [.NET Desktop Runtime Installation Fails](#issue-net-desktop-runtime-installation-fails)
-- [Visual C++ Redistributable Installation Fails](#issue-visual-c-redistributable-installation-fails)
+- [MSVCP140.dll or VCRUNTIME140.dll missing](#issue-visual-c-redistributable-installation-fails)
 - [DirectX Runtime Installation Problems](#issue-directx-runtime-installation-problems)
 - [.NET Framework 4.8.1 Installation Problems](#issue-net-framework-481-installation-problems)
 - [Script Requires Admin Rights](#issue-script-requires-admin-rights)
