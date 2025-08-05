@@ -2,6 +2,7 @@
 setlocal enabledelayedexpansion
 
 set "INSTALL_DOTNET=1"
+set "INSTALL_DOTNET_SDK=1"
 set "INSTALL_VCREDIST_X64=1"
 set "INSTALL_VCREDIST_X86=1"
 set "INSTALL_WEBVIEW2=1"
@@ -94,8 +95,10 @@ set "VCREDIST_X86=%TEMPDIR%\vc_redist_x86_%UUID%.exe"
 set "WEBVIEW2=%TEMPDIR%\webview2_%UUID%.exe"
 set "DXREDIST=%TEMPDIR%\directx_redist_%UUID%.exe"
 set "NDP481=%TEMPDIR%\ndp481_%UUID%.exe"
+set "DOTNET_SDK_INSTALLER=%TEMPDIR%\dotnet_sdk_%UUID%.exe"
 
 set "DOTNET_URL=https://download.visualstudio.microsoft.com/download/pr/105b0f6d-d3b9-4a41-a78b-321cb74a44a0/e287dc267a9c67ea23834d06239e6e7a/windowsdesktop-runtime-8.0.7-win-x64.exe"
+set "DOTNET_SDK_URL=https://download.visualstudio.microsoft.com/download/pr/7aa2de45-7321-433a-8ef0-7d0c6b6d1dd8/e31b9215c0b35b7b10a8bb1e8ebf4b83/dotnet-sdk-8.0.412-win-x64.exe"
 set "VCREDIST_X64_URL=https://aka.ms/vs/17/release/vc_redist.x64.exe"
 set "VCREDIST_X86_URL=https://aka.ms/vs/17/release/vc_redist.x86.exe"
 set "WEBVIEW2_URL=https://go.microsoft.com/fwlink/p/?LinkId=2124703"
@@ -103,10 +106,12 @@ set "DIRECTX_URL=https://download.microsoft.com/download/1/6/1/161a7e5d-9d07-4f3
 set "NDP481_URL=https://go.microsoft.com/fwlink/?linkid=2088631"
 
 set "DOTNET_SHA256=391ca05d7540c58f25047ae07b8c5656829f7fd32f6e88a4e34c5337525f574e5714657e1c4f4f4d48e006087f573f8c03f1fc8eab8c9b9dab4d5ca5c8ea1fd4"
+set "DOTNET_SDK_SHA256=e31b9215c0b35b7b10a8bb1e8ebf4b83"
 set "VCREDIST_X64_SHA256=UNKNOWN"
 set "VCREDIST_X86_SHA256=UNKNOWN"
 
 set "DOTNET_STATUS=UNKNOWN"
+set "DOTNET_SDK_STATUS=UNKNOWN"
 set "VCREDIST_X64_STATUS=UNKNOWN"
 set "VCREDIST_X86_STATUS=UNKNOWN"
 set "WEBVIEW2_STATUS=UNKNOWN"
@@ -135,6 +140,7 @@ call :log ""
 
 set "MISSING_COUNT=0"
 if "%DOTNET_STATUS%"=="MISSING" if "%INSTALL_DOTNET%"=="1" set /a MISSING_COUNT+=1
+if "%DOTNET_SDK_STATUS%"=="MISSING" if "%INSTALL_DOTNET_SDK%"=="1" set /a MISSING_COUNT+=1
 if "%VCREDIST_X64_STATUS%"=="MISSING" if "%INSTALL_VCREDIST_X64%"=="1" set /a MISSING_COUNT+=1
 if "%VCREDIST_X86_STATUS%"=="MISSING" if "%INSTALL_VCREDIST_X86%"=="1" set /a MISSING_COUNT+=1
 if "%WEBVIEW2_STATUS%"=="MISSING" if "%INSTALL_WEBVIEW2%"=="1" set /a MISSING_COUNT+=1
@@ -207,67 +213,80 @@ if "%INSTALL_DOTNET%"=="0" (
 )
 call :log ""
 
+if "%INSTALL_DOTNET_SDK%"=="0" (
+    call :log "[2/?] .NET 8.0 SDK"
+    call :log "    [~] Skipped by user (--no-dotnet-sdk)"
+) else if "%DOTNET_SDK_STATUS%"=="MISSING" (
+    call :log "[2/?] .NET 8.0 SDK"
+    call :log "    [↻] Installing..."
+    call :install_dotnet_sdk
+) else (
+    call :log "[2/?] .NET 8.0 SDK"
+    call :log "    [✔] Already installed. Skipping."
+)
+call :log ""
+
 if "%INSTALL_VCREDIST_X64%"=="0" (
-    call :log "[2/?] VC++ Redistributable x64"
+    call :log "[3/?] VC++ Redistributable x64"
     call :log "    [~] Skipped by user (--no-vcredist)"
 ) else if "%VCREDIST_X64_STATUS%"=="MISSING" (
-    call :log "[2/?] VC++ Redistributable x64"
+    call :log "[3/?] VC++ Redistributable x64"
     call :log "    [↻] Installing..."
     call :install_vcredist_x64
 ) else (
-    call :log "[2/?] VC++ Redistributable x64"
+    call :log "[3/?] VC++ Redistributable x64"
     call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_VCREDIST_X86%"=="0" (
-    call :log "[3/?] VC++ Redistributable x86"
+    call :log "[4/?] VC++ Redistributable x86"
     call :log "    [~] Skipped by user (--no-vcredist)"
 ) else if "%VCREDIST_X86_STATUS%"=="MISSING" (
-    call :log "[3/?] VC++ Redistributable x86"
+    call :log "[4/?] VC++ Redistributable x86"
     call :log "    [↻] Installing..."
     call :install_vcredist_x86
 ) else (
-    call :log "[3/?] VC++ Redistributable x86"
+    call :log "[4/?] VC++ Redistributable x86"
     call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_WEBVIEW2%"=="0" (
-    call :log "[4/?] WebView2 Runtime"
+    call :log "[5/?] WebView2 Runtime"
     call :log "    [~] Skipped by user (--no-webview2)"
 ) else if "%WEBVIEW2_STATUS%"=="MISSING" (
-    call :log "[4/?] WebView2 Runtime"
+    call :log "[5/?] WebView2 Runtime"
     call :log "    [↻] Installing..."
     call :install_webview2
 ) else (
-    call :log "[4/?] WebView2 Runtime"
+    call :log "[5/?] WebView2 Runtime"
     call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_DIRECTX%"=="0" (
-    call :log "[5/?] DirectX Runtime"
+    call :log "[6/?] DirectX Runtime"
     call :log "    [~] Skipped by user (--no-directx)"
 ) else if "%DIRECTX_STATUS%"=="MISSING" (
-    call :log "[5/?] DirectX Runtime"
+    call :log "[6/?] DirectX Runtime"
     call :log "    [↻] Installing..."
     call :install_directx
 ) else (
-    call :log "[5/?] DirectX Runtime"
+    call :log "[6/?] DirectX Runtime"
     call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
 
 if "%INSTALL_NDP481%"=="0" (
-    call :log "[6/?] .NET Framework 4.8.1"
+    call :log "[7/?] .NET Framework 4.8.1"
     call :log "    [~] Skipped by user (--no-framework)"
 ) else if "%NDP481_STATUS%"=="MISSING" (
-    call :log "[6/?] .NET Framework 4.8.1"
+    call :log "[7/?] .NET Framework 4.8.1"
     call :log "    [↻] Installing..."
     call :install_ndp481
 ) else (
-    call :log "[6/?] .NET Framework 4.8.1"
+    call :log "[7/?] .NET Framework 4.8.1"
     call :log "    [✔] Already installed. Skipping."
 )
 call :log ""
@@ -277,6 +296,7 @@ echo ==============================
 echo Installation Summary
 echo ==============================
 echo [Check] .NET Desktop Runtime 8.0 .......... %DOTNET_STATUS%
+echo [Check] .NET 8.0 SDK ....................... %DOTNET_SDK_STATUS%
 echo [Check] VC++ Redist x64 ................... %VCREDIST_X64_STATUS%
 echo [Check] VC++ Redist x86 ................... %VCREDIST_X86_STATUS%
 echo [Check] WebView2 Runtime .................. %WEBVIEW2_STATUS%
@@ -293,6 +313,10 @@ call :log ""
 if "%DOTNET_STATUS%"=="INSTALLED" set "DOTNET_SYMBOL=✔"
 if "%DOTNET_STATUS%"=="USER_SKIPPED" set "DOTNET_SYMBOL=~"
 if "%DOTNET_STATUS%"=="FAILED" set "DOTNET_SYMBOL=✖"
+
+if "%DOTNET_SDK_STATUS%"=="INSTALLED" set "DOTNET_SDK_SYMBOL=✔"
+if "%DOTNET_SDK_STATUS%"=="USER_SKIPPED" set "DOTNET_SDK_SYMBOL=~"
+if "%DOTNET_SDK_STATUS%"=="FAILED" set "DOTNET_SDK_SYMBOL=✖"
 
 if "%VCREDIST_X64_STATUS%"=="INSTALLED" set "VC64_SYMBOL=✔"
 if "%VCREDIST_X64_STATUS%"=="USER_SKIPPED" set "VC64_SYMBOL=~"
@@ -316,6 +340,7 @@ if "%NDP481_STATUS%"=="USER_SKIPPED" set "NDP_SYMBOL=~"
 if "%NDP481_STATUS%"=="FAILED" set "NDP_SYMBOL=✖"
 
 call :log "%DOTNET_SYMBOL% .NET Desktop Runtime 8.0       → %DOTNET_STATUS%"
+call :log "%DOTNET_SDK_SYMBOL% .NET 8.0 SDK                   → %DOTNET_SDK_STATUS%"
 call :log "%VC64_SYMBOL% VC++ Redistributables x64/x86    → %VCREDIST_X64_STATUS%/%VCREDIST_X86_STATUS%"
 call :log "%WV2_SYMBOL% WebView2 Runtime               → %WEBVIEW2_STATUS%"
 call :log "%DX_SYMBOL% DirectX Runtime                → %DIRECTX_STATUS%"
@@ -416,6 +441,49 @@ if exist "%DOTNET_INSTALLER%" (
     )
 )
 
+:install_dotnet_sdk
+call :log "    [↓] Downloading..."
+set "DOTNET_SDK_INSTALLER=%TEMPDIR%\dotnet_sdk_%UUID%.exe"
+
+set "RETRIES=3"
+set "COUNT=0"
+
+:retry_dotnet_sdk_download
+set /a COUNT+=1
+if %COUNT% GTR 1 call :log "    [↻] Retry attempt %COUNT%/%RETRIES%..."
+powershell -Command "try { Invoke-WebRequest -Uri '%DOTNET_SDK_URL%' -OutFile '%DOTNET_SDK_INSTALLER%' -TimeoutSec 60 -UseBasicParsing } catch { Write-Host '[ERROR] Download failed:' $_.Exception.Message; exit 1 }"
+
+if exist "%DOTNET_SDK_INSTALLER%" (
+    call :validate_sha256 "%DOTNET_SDK_INSTALLER%" "%DOTNET_SDK_SHA256%"
+    if errorlevel 1 (
+        call :log "    [✖] SHA256 validation failed"
+        del /f /q "%DOTNET_SDK_INSTALLER%"
+        set "DOTNET_SDK_STATUS=FAILED"
+        exit /b 12
+    )
+    
+    call :log "    [⚙] Installing..."
+    "%DOTNET_SDK_INSTALLER%" /install /quiet /norestart
+    if errorlevel 1 (
+        call :log "    [✖] Installation failed."
+        set "DOTNET_SDK_STATUS=FAILED"
+        exit /b 12
+    )
+    call :cleanup "%DOTNET_SDK_INSTALLER%"
+    call :log "    [✔] Installed successfully."
+    set "DOTNET_SDK_STATUS=INSTALLED"
+    exit /b 0
+) else (
+    if %COUNT% LSS %RETRIES% (
+        call :log "    [⚠] Download attempt %COUNT% failed. Retrying..."
+        goto retry_dotnet_sdk_download
+    ) else (
+        call :log "    [✖] Download failed after %RETRIES% attempts."
+        set "DOTNET_SDK_STATUS=FAILED"
+        exit /b 12
+    )
+)
+
 :cleanup
 if exist "%~1" del /f /q "%~1"
 if exist "%~1.log" del /f /q "%~1.log"
@@ -450,11 +518,11 @@ if /i "%ACTUAL_HASH%"=="%EXPECTED_HASH%" (
 
 :check_all_dependencies
 if "%INSTALL_DOTNET%"=="0" (
-    call :log "[1/6] .NET Desktop Runtime 8.0"
+    call :log "[1/7] .NET Desktop Runtime 8.0"
     call :log "    [~] Skipped by user (--no-dotnet)"
     set "DOTNET_STATUS=USER_SKIPPED"
 ) else (
-    call :log "[1/6] .NET Desktop Runtime 8.0"
+    call :log "[1/7] .NET Desktop Runtime 8.0"
     call :log "    [🔍] Checking..."
     reg query "HKLM\SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\WindowsDesktop" | find "8.0" >nul
     if %errorlevel%==0 (
@@ -466,12 +534,29 @@ if "%INSTALL_DOTNET%"=="0" (
     )
 )
 
+if "%INSTALL_DOTNET_SDK%"=="0" (
+    call :log "[2/7] .NET 8.0 SDK"
+    call :log "    [~] Skipped by user (--no-dotnet-sdk)"
+    set "DOTNET_SDK_STATUS=USER_SKIPPED"
+) else (
+    call :log "[2/7] .NET 8.0 SDK"
+    call :log "    [🔍] Checking..."
+    reg query "HKLM\SOFTWARE\dotnet\Setup\InstalledVersions\x64\sdk" | find "8.0" >nul
+    if %errorlevel%==0 (
+        call :log "    [✔] Found installed version."
+        set "DOTNET_SDK_STATUS=INSTALLED"
+    ) else (
+        call :log "    [✖] Not found."
+        set "DOTNET_SDK_STATUS=MISSING"
+    )
+)
+
 if "%INSTALL_VCREDIST_X64%"=="0" (
-    call :log "[2/6] VC++ Redistributable x64"
+    call :log "[3/7] VC++ Redistributable x64"
     call :log "    [~] Skipped by user (--no-vcredist)"
     set "VCREDIST_X64_STATUS=USER_SKIPPED"
 ) else (
-    call :log "[2/6] VC++ Redistributable x64"
+    call :log "[3/7] VC++ Redistributable x64"
     call :log "    [🔍] Checking..."
     reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" >nul 2>&1
     if %errorlevel%==0 (
@@ -484,11 +569,11 @@ if "%INSTALL_VCREDIST_X64%"=="0" (
 )
 
 if "%INSTALL_VCREDIST_X86%"=="0" (
-    call :log "[3/6] VC++ Redistributable x86"
+    call :log "[4/7] VC++ Redistributable x86"
     call :log "    [~] Skipped by user (--no-vcredist)"
     set "VCREDIST_X86_STATUS=USER_SKIPPED"
 ) else (
-    call :log "[3/6] VC++ Redistributable x86"
+    call :log "[4/7] VC++ Redistributable x86"
     call :log "    [🔍] Checking..."
     reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" >nul 2>&1
     if %errorlevel%==0 (
@@ -501,11 +586,11 @@ if "%INSTALL_VCREDIST_X86%"=="0" (
 )
 
 if "%INSTALL_WEBVIEW2%"=="0" (
-    call :log "[4/6] WebView2 Runtime"
+    call :log "[5/7] WebView2 Runtime"
     call :log "    [~] Skipped by user (--no-webview2)"
     set "WEBVIEW2_STATUS=USER_SKIPPED"
 ) else (
-    call :log "[4/6] WebView2 Runtime"
+    call :log "[5/7] WebView2 Runtime"
     call :log "    [🔍] Checking..."
     reg query "HKLM\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F4A5B3DC-0E5D-4C0A-836E-4AD7EA73D1B2}" >nul 2>&1
     if %errorlevel%==0 (
@@ -518,11 +603,11 @@ if "%INSTALL_WEBVIEW2%"=="0" (
 )
 
 if "%INSTALL_DIRECTX%"=="0" (
-    call :log "[5/6] DirectX Runtime"
+    call :log "[6/7] DirectX Runtime"
     call :log "    [~] Skipped by user (--no-directx)"
     set "DIRECTX_STATUS=USER_SKIPPED"
 ) else (
-    call :log "[5/6] DirectX Runtime"
+    call :log "[6/7] DirectX Runtime"
     call :log "    [🔍] Checking..."
     if exist "%WINDIR%\System32\D3DX9_43.dll" (
         call :log "    [✔] Found installed version."
@@ -534,11 +619,11 @@ if "%INSTALL_DIRECTX%"=="0" (
 )
 
 if "%INSTALL_NDP481%"=="0" (
-    call :log "[6/6] .NET Framework 4.8.1"
+    call :log "[7/7] .NET Framework 4.8.1"
     call :log "    [~] Skipped by user (--no-framework)"
     set "NDP481_STATUS=USER_SKIPPED"
 ) else (
-    call :log "[6/6] .NET Framework 4.8.1"
+    call :log "[7/7] .NET Framework 4.8.1"
     call :log "    [🔍] Checking..."
     reg query "HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" /v Release | findstr /r /c:"53332[0-9]" >nul
     if %errorlevel%==0 (
@@ -555,6 +640,10 @@ exit /b 0
 if "%DOTNET_STATUS%"=="INSTALLED" set "DOTNET_SYMBOL=✔"
 if "%DOTNET_STATUS%"=="USER_SKIPPED" set "DOTNET_SYMBOL=~"
 if "%DOTNET_STATUS%"=="MISSING" set "DOTNET_SYMBOL=✖"
+
+if "%DOTNET_SDK_STATUS%"=="INSTALLED" set "DOTNET_SDK_SYMBOL=✔"
+if "%DOTNET_SDK_STATUS%"=="USER_SKIPPED" set "DOTNET_SDK_SYMBOL=~"
+if "%DOTNET_SDK_STATUS%"=="MISSING" set "DOTNET_SDK_SYMBOL=✖"
 
 if "%VCREDIST_X64_STATUS%"=="INSTALLED" set "VC64_SYMBOL=✔"
 if "%VCREDIST_X64_STATUS%"=="USER_SKIPPED" set "VC64_SYMBOL=~"
@@ -577,6 +666,7 @@ if "%NDP481_STATUS%"=="USER_SKIPPED" set "NDP_SYMBOL=~"
 if "%NDP481_STATUS%"=="MISSING" set "NDP_SYMBOL=✖"
 
 call :log "%DOTNET_SYMBOL% .NET Desktop Runtime 8.0       → %DOTNET_STATUS%"
+call :log "%DOTNET_SDK_SYMBOL% .NET 8.0 SDK                   → %DOTNET_SDK_STATUS%"
 call :log "%VC64_SYMBOL% VC++ Redistributable x64         → %VCREDIST_X64_STATUS%"
 call :log "%VC86_SYMBOL% VC++ Redistributable x86         → %VCREDIST_X86_STATUS%"
 call :log "%WV2_SYMBOL% WebView2 Runtime               → %WEBVIEW2_STATUS%"
@@ -704,4 +794,65 @@ if exist "%NDP481%" (
     set "NDP481_STATUS=FAILED"
     exit /b 15
 )
+exit /b 0
+
+:parse_args_string
+set "ARGS_STRING=%~1"
+for %%A in (%ARGS_STRING%) do (
+    if /i "%%A"=="--no-dotnet" set "INSTALL_DOTNET=0"
+    if /i "%%A"=="--no-dotnet-sdk" set "INSTALL_DOTNET_SDK=0"
+    if /i "%%A"=="--no-vcredist" (
+        set "INSTALL_VCREDIST_X64=0"
+        set "INSTALL_VCREDIST_X86=0"
+    )
+    if /i "%%A"=="--no-webview2" set "INSTALL_WEBVIEW2=0"
+    if /i "%%A"=="--no-directx" set "INSTALL_DIRECTX=0"
+    if /i "%%A"=="--no-framework" set "INSTALL_NDP481=0"
+    if /i "%%A"=="--quiet" set "QUIET_MODE=1"
+)
+exit /b 0
+
+:parse_args_from_cmdline
+:args_loop
+if "%~1"=="" exit /b 0
+if /i "%~1"=="--no-dotnet" set "INSTALL_DOTNET=0"
+if /i "%~1"=="--no-dotnet-sdk" set "INSTALL_DOTNET_SDK=0"
+if /i "%~1"=="--no-vcredist" (
+    set "INSTALL_VCREDIST_X64=0"
+    set "INSTALL_VCREDIST_X86=0"
+)
+if /i "%~1"=="--no-webview2" set "INSTALL_WEBVIEW2=0"
+if /i "%~1"=="--no-directx" set "INSTALL_DIRECTX=0"
+if /i "%~1"=="--no-framework" set "INSTALL_NDP481=0"
+if /i "%~1"=="--quiet" set "QUIET_MODE=1"
+shift
+goto args_loop
+
+:show_help
+echo.
+echo ========================================
+echo   Bunni Dependency Installer (No-Winget)
+echo ========================================
+echo.
+echo Usage: %~nx0 [OPTIONS]
+echo.
+echo OPTIONS:
+echo   --no-dotnet         Skip .NET Desktop Runtime 8.0 installation
+echo   --no-dotnet-sdk     Skip .NET 8.0 SDK installation
+echo   --no-vcredist       Skip VC++ Redistributable installation
+echo   --no-webview2       Skip WebView2 Runtime installation
+echo   --no-directx        Skip DirectX Runtime installation
+echo   --no-framework      Skip .NET Framework 4.8.1 installation
+echo   --quiet             Run in quiet mode (minimal console output)
+echo   --help              Show this help message
+echo.
+echo EXAMPLES:
+echo   %~nx0                           Install all dependencies
+echo   %~nx0 --no-dotnet               Skip .NET Runtime installation
+echo   %~nx0 --no-vcredist --quiet     Skip VC++ Redist, run quietly
+echo.
+echo NOTE: This version does NOT require Winget to be installed.
+echo It downloads and installs all dependencies directly.
+echo.
+pause
 exit /b 0
